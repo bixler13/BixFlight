@@ -7,6 +7,8 @@ extern float gyroroll,gyropitch;
 extern float roll,pitch, pitch_error, roll_error;
 extern float dt;
 
+extern int SDchip_pin; 
+
 extern int pitch_servo_pin;
 extern int roll_servo1_pin;
 extern int roll_servo2_pin;

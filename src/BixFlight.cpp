@@ -13,6 +13,8 @@ float gyroroll,gyropitch;
 float roll,pitch, pitch_error, roll_error;
 float dt;
 
+const int SDchip_pin = 4; //digitial pin for sd card logging purposes
+
 int pitch_servo_pin = 8;
 int roll_servo1_pin = 9;
 int roll_servo2_pin = 10;
