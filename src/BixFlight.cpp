@@ -75,11 +75,11 @@ void loop() {
   dt = (EndTime - StartTime); //calculate the time between gyro reading values for the complemenatary filter
   dt = (dt) / 1000000; //convert to seconds
 
-  // Serial.print("Pitch  ");
-  // Serial.print(pitch);
-  // Serial.print("  Roll  ");
-  // Serial.print(roll);
-  // Serial.print(" mode  ");
-  // Serial.println(dt);
+  Serial.print("Pitch  ");
+  Serial.print(pitch);
+  Serial.print("  Roll  ");
+  Serial.print(roll);
+  Serial.print(" dt  ");
+  Serial.println(dt,3);
 
 }
