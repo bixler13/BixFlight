@@ -11,7 +11,7 @@ void sdlog_setup(){
     // don't do anything more:
     while (1);
   }
-  Serial.println("card initialized.");
+  Serial.println("SD Card Initialized");
 }
 
 
