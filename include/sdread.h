@@ -1,5 +1,5 @@
-#ifndef BIXFLIGHT_H
-#define BIXFLIGHT_H
+#ifndef SDREAD_H
+#define SDREAD_H
 
 void sdread();
 
