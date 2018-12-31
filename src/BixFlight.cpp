@@ -1,6 +1,7 @@
 #include <arduino.h>
 #include <Wire.h>
 #include <servo.h>
+#include <SD.h>
 #include "sensor.h"
 #include "BixFlight.h"
 #include "actuator.h"
@@ -65,21 +66,20 @@ void loop() {
   find_mode();
   IMU_Read();
   IMU_Data();
+  sdlog();
   controller();
   servo_loop();
-  delay(10);
+  //delay(10);
 
   float EndTime = micros();
   dt = (EndTime - StartTime); //calculate the time between gyro reading values for the complemenatary filter
   dt = (dt) / 1000000; //convert to seconds
 
-  Serial.print("Pitch  ");
-  Serial.print(pitch);
-  Serial.print("  Roll  ");
-  Serial.print(roll);
-  Serial.print(" mode  ");
-  Serial.println(mode);
-  //Serial.print(" dt  ");
-  //Serial.println(mode);
+  // Serial.print("Pitch  ");
+  // Serial.print(pitch);
+  // Serial.print("  Roll  ");
+  // Serial.print(roll);
+  // Serial.print(" mode  ");
+  // Serial.println(dt);
 
 }
