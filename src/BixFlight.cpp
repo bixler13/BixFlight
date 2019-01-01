@@ -54,7 +54,7 @@ void setup() {
   IMU_Setup();
   servo_setup();
   rc_read_setup_ppm();
-  Serial.begin(57600);
+  Serial.begin(115200);
   sdlog_setup();
   delay(500);
 }
