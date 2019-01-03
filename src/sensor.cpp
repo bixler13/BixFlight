@@ -40,7 +40,13 @@ void IMU_Data(){
   //calulate the angle the gyro thinks you are at
   gyropitch = pitch + GyroX*dt;
   gyroroll  = roll - GyroY*dt;
+}
 
+void complimentary(){
   pitch = .98 * gyropitch + .02 * accpitch;
   roll =  .98 * gyroroll + .02 * accroll;
+}
+
+void kalman(){
+  //calculate the estimated pitch values
 }

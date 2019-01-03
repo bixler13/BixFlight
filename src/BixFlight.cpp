@@ -66,6 +66,7 @@ void loop() {
   find_mode();
   IMU_Read();
   IMU_Data();
+  complimentary();
   sdlog();
   controller();
   servo_loop();
