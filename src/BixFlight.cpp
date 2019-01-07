@@ -1,5 +1,4 @@
 #include <arduino.h>
-#include <Wire.h>
 #include <servo.h>
 #include <SD.h>
 #include "sensor.h"
