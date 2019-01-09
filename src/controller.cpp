@@ -3,6 +3,7 @@
 #include "controller.h"
 #include "function.h"
 
+float pitch_error_old, roll_error_old;
 
 void controller(){
   if (mode == 3){ //manual mode
@@ -27,7 +28,8 @@ void controller(){
     }
 
     //Calculate the Kd portion
-    D_pitch = 0;
+    D_pitch = ((pitch_error - pitch_error_old)/dt)*d_pitch;
+    pitch_error_old = pitch_error;
 
     pitch_pidsum = (P_pitch + I_pitch_new + D_pitch); //sum the contributions
     pitch_servo_angle = constrain(pitch_servo_center + pitch_pidsum, 30, 150); //take in account for the servo center (trim)
@@ -45,7 +47,8 @@ void controller(){
     I_roll_new = I_roll_old *i_roll;
 
     //Calculate the Kd portion
-    D_roll = 0;
+    D_roll = ((roll_error - roll_error_old)/dt)*d_roll;
+    roll_error_old = roll_error;
 
     roll_pidsum = (P_roll + I_roll_new + D_roll); //sum the contributions
     roll_servo_angle = constrain(roll_servo_center + roll_pidsum, 30, 150); //take in account for the servo center (trim)
