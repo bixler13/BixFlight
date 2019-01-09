@@ -12,6 +12,7 @@ float AccX,AccY,AccZ,Temp,GyroX,GyroY,GyroZ;
 float accpitch,accroll;
 float gyroroll,gyropitch;
 float roll,pitch, pitch_error, roll_error;
+float pitch_error_old, roll_error_old;
 float dt;
 
 int SDchip_pin = 4; //digitial pin for sd card logging purposes
