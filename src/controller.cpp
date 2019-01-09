@@ -3,8 +3,6 @@
 #include "controller.h"
 #include "function.h"
 
-float pitch_error_old, roll_error_old;
-
 void controller(){
   if (mode == 3){ //manual mode
     pitch_servo_angle = mapFloat(pitch_input, -1000, 1000, 50, 130);
