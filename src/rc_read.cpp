@@ -3,8 +3,8 @@
 #include "rc_read.h"
 
 void rc_read_setup_ppm(){
-  pinMode(2, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(2), rc_read_ppm2, FALLING);
+  pinMode(3, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(3), rc_read_ppm2, FALLING);
  }
 
 void rc_read_ppm2(){

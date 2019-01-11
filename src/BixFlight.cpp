@@ -7,6 +7,7 @@
 #include "controller.h"
 #include "rc_read.h"
 #include "sdlog.h"
+#include "sensordmp.h"
 
 float AccX,AccY,AccZ,Temp,GyroX,GyroY,GyroZ;
 float accpitch,accroll;
@@ -41,21 +42,22 @@ float pitch_command, roll_command;
 int pitch_servo_center = 90; //Adjust this value to trim the aircraft
 float p_pitch = .9; float P_pitch;
 float i_pitch = 0; float I_pitch_old; float I_pitch_new;
-float d_pitch = 0.1; float D_pitch;
+float d_pitch = 0; float D_pitch;
 
 //Roll Axis Params
 int roll_servo_center = 90; //Adjust this value to trim the aircraft
 float p_roll = 1.5; float P_roll;
 float i_roll = 0; float I_roll_old; float I_roll_new;
-float d_roll = 0.1; float D_roll;
+float d_roll = 0; float D_roll;
 
 
 void setup() {
-  IMU_Setup();
+  //IMU_Setup();
   servo_setup();
   rc_read_setup_ppm();
+  dmpsetup();
   Serial.begin(115200);
-  sdlog_setup();
+  //sdlog_setup();
   delay(500);
 }
 
@@ -64,10 +66,12 @@ void loop() {
 
   rc_read_ppm();
   find_mode();
-  IMU_Read();
-  IMU_Data();
-  complimentary();
-  sdlog();
+  dmploop();
+  //IMU_Read();
+  //IMU_Data();
+  //complimentary();
+
+  //sdlog();
   controller();
   servo_loop();
   //delay(10);
@@ -77,9 +81,9 @@ void loop() {
   dt = (dt) / 1000000; //convert to seconds
 
   Serial.print("Pitch  ");
-  Serial.print(D_pitch);
+  Serial.print(pitch_input);
   Serial.print("  Roll  ");
-  Serial.print(D_roll);
+  Serial.print(roll_input);
   Serial.print(" dt  ");
   Serial.println(dt,3);
 
