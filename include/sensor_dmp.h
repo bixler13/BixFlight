@@ -1,5 +1,5 @@
-#ifndef SENSORDMP_H
-#define SENSORDMP_H
+#ifndef SENSOR_DMP_H
+#define SENSOR_DMP_H
 
 void dmpsetup();
 void dmploop();

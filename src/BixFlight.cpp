@@ -1,13 +1,14 @@
 #include <arduino.h>
 #include <servo.h>
 #include <SD.h>
-#include "sensor.h"
+#include "sensor_raw.h"
+#include "sensor_dmp.h"
 #include "BixFlight.h"
 #include "actuator.h"
 #include "controller.h"
 #include "rc_read.h"
 #include "sdlog.h"
-#include "sensordmp.h"
+
 
 float AccX,AccY,AccZ,Temp,GyroX,GyroY,GyroZ;
 float accpitch,accroll;
@@ -81,9 +82,9 @@ void loop() {
   dt = (dt) / 1000000; //convert to seconds
 
   Serial.print("Pitch  ");
-  Serial.print(pitch_input);
+  Serial.print(pitch);
   Serial.print("  Roll  ");
-  Serial.print(roll_input);
+  Serial.print(roll);
   Serial.print(" dt  ");
   Serial.println(dt,3);
 
