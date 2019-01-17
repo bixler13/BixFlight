@@ -2,6 +2,8 @@
 #define BIXFLIGHT_H
 
 extern float roll, pitch, yaw, pitch_error, roll_error, yaw_error;
+extern float roll_old, pitch_old, roll_rate, pitch_rate;
+extern float roll_rate_command, pitch_rate_command;
 extern float pitch_error_old, roll_error_old, yaw_error_old;
 extern float dt;
 

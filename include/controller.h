@@ -3,5 +3,5 @@
 
 void manual_mode();
 void horizon_mode();
-void altitude_hold_mode();
+void acro_mode();
 #endif

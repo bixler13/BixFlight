@@ -24,7 +24,7 @@ void manual_mode(){
       I_pitch_old = ((pitch_error * dt)+I_pitch_old);
       I_pitch_new = I_pitch_old *i_pitch;
       }
-      
+
       else{
         I_pitch_old = 0;
         I_pitch_new = 0;
@@ -64,4 +64,14 @@ void manual_mode(){
     roll_servo_angle = constrain(roll_servo_center + roll_pidsum, 30, 150); //take in account for the servo center (trim)
     roll_servo2_angle = mapFloat(roll_servo_angle, 0, 180, 180 ,0);
     roll_servo_angle = mapFloat(roll_servo_angle, 0, 180, 180 ,0);
+   }
+
+   void acro_mode(){
+     pitch_rate_command = mapFloat(pitch_input, -1000, 1000, -100, 100);
+     roll_rate_command = mapFloat(roll_input, -1000, 1000, -100, 100);
+     pitch_rate = (pitch - pitch_old) / dt;
+     roll_rate = (roll - roll_old) / dt;
+
+     pitch = pitch_old;
+     roll = roll_old;
    }

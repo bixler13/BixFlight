@@ -13,7 +13,9 @@
 
 #define LOG_DATA // define this if you want to log data to SD
 
-float roll,pitch,yaw, pitch_error, roll_error, yaw_error;
+float roll, pitch, yaw, pitch_error, roll_error, yaw_error;
+float roll_old, pitch_old, roll_rate, pitch_rate;
+float roll_rate_command, pitch_rate_command;
 float pitch_error_old, roll_error_old, yaw_error_old;
 float dt;
 
@@ -85,6 +87,9 @@ void loop() {
 //mode determination/////////////////////////////////////////////////////////
   if (mode == 3){
     horizon_mode();
+  }
+  else if (mode ==2){
+    acro_mode();
   }
   else{
     manual_mode();
