@@ -1,6 +1,5 @@
 #include <arduino.h>
 #include <servo.h>
-#include <SD.h>
 #include "sensor.h"
 #include "BixFlight.h"
 #include "actuator.h"
@@ -8,8 +7,14 @@
 #include "rc_read.h"
 #include "sdlog.h"
 
-float roll,pitch, pitch_error, roll_error;
-float pitch_error_old, roll_error_old;
+#define OUTPUT_IMU
+//#define OUTPUT_SERVO
+//#define OUTPUT_INPUT
+
+#define LOG_DATA // define this if you want to log data to SD
+
+float roll,pitch,yaw, pitch_error, roll_error, yaw_error;
+float pitch_error_old, roll_error_old, yaw_error_old;
 float dt;
 
 int SDchip_pin = 4; //digitial pin for sd card logging purposes
@@ -48,40 +53,79 @@ float d_roll = 0; float D_roll;
 
 
 void setup() {
+//setup functions/////////////////////////////////////////////////////////////
   servo_setup();
   ppm_read_setup();
   imu_setup();
-  Serial.begin(115200);
-  sdlog_setup();
-  delay(500);
+
+  #ifdef LOG_DATA
+    sdlog_setup();
+  #endif
+//end setup functions//////////////////////////////////////////////////////////
+
+  #if defined(OUTPUT_IMU)  || defined(OUTPUT_INPUT) || defined(OUTPUT_SERVO)
+    Serial.begin(115200);
+  #endif
+
+  delay(500); //delay to prepare for loop to bein
 }
 
 void loop() {
   float StartTime = micros(); //start the timer to calculate looptime
 
+//board loop///////////////////////////////////////////////////////////////////
   ppm_read_loop();
   imu_loop();
-  sdlog();
   servo_loop();
 
-// mode determination
+  #ifdef LOG_DATA
+    sdlog_loop();
+  #endif
+//end board loop//////////////////////////////////////////////////////////////
+
+//mode determination/////////////////////////////////////////////////////////
   if (mode == 3){
     horizon_mode();
   }
   else{
     manual_mode();
   }
-//end mode determineation
+//end mode determineation////////////////////////////////////////////////////////
+
+//serial printing////////////////////////////////////////////////////////////////
+#ifdef OUTPUT_INPUT
+  Serial.print(throttle_input);
+  Serial.print(" , ");
+  Serial.print(pitch_input);
+  Serial.print(" , ");
+  Serial.print(roll_input);
+  Serial.print(" , ");
+  Serial.print(yaw_input);
+  Serial.print(" , ");
+  Serial.println(mode);
+#endif
+
+#ifdef OUTPUT_IMU
+  Serial.print(roll);
+  Serial.print(" , ");
+  Serial.print(pitch);
+  Serial.print(" , ");
+  Serial.print(yaw);
+  Serial.print(" , ");
+  Serial.println(dt,3);
+#endif
+
+#ifdef OUTPUT_SERVO
+  Serial.print(pitch_servo_angle);
+  Serial.print(" , ");
+  Serial.print(roll_servo_angle);
+  Serial.print(" , ");
+  Serial.println(roll_servo2_angle);
+#endif
+//end serial printing/////////////////////////////////////////////////////////
 
   float EndTime = micros();
   dt = (EndTime - StartTime); //calculate the time between gyro reading values for the complemenatary filter
   dt = (dt) / 1000000; //convert to seconds
-
-  Serial.print("Pitch  ");
-  Serial.print(pitch);
-  Serial.print("  Roll  ");
-  Serial.print(roll);
-  Serial.print(" dt  ");
-  Serial.println(dt,3);
 
 }

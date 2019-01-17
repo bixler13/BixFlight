@@ -2,6 +2,6 @@
 #define SDLOG_H
 
 void sdlog_setup();
-void sdlog();
+void sdlog_loop();
 
 #endif

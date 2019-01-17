@@ -324,6 +324,7 @@ void imu_loop() {
             //yaw = ypr[0]*57.3;
             pitch = ypr[2]*57.3;
             roll = ypr[1]*57.3;
+            yaw = ypr[0]*57.3;
             // Serial.print("ypr\t");
             // Serial.print(ypr[0] * 180/M_PI);
             // Serial.print("\t");

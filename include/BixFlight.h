@@ -1,8 +1,8 @@
 #ifndef BIXFLIGHT_H
 #define BIXFLIGHT_H
 
-extern float roll,pitch, pitch_error, roll_error;
-extern float pitch_error_old, roll_error_old;
+extern float roll, pitch, yaw, pitch_error, roll_error, yaw_error;
+extern float pitch_error_old, roll_error_old, yaw_error_old;
 extern float dt;
 
 extern int SDchip_pin;

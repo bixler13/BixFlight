@@ -11,7 +11,7 @@ void sdlog_setup(){
 }
 
 
-void sdlog(){
+void sdlog_loop(){
 
   log_file = SD.open("DATA.txt", FILE_WRITE);
 
