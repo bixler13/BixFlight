@@ -1,18 +1,13 @@
 #include <arduino.h>
 #include <servo.h>
 #include <SD.h>
-#include "sensor_raw.h"
-#include "sensor_dmp.h"
+#include "sensor.h"
 #include "BixFlight.h"
 #include "actuator.h"
 #include "controller.h"
 #include "rc_read.h"
 #include "sdlog.h"
 
-
-float AccX,AccY,AccZ,Temp,GyroX,GyroY,GyroZ;
-float accpitch,accroll;
-float gyroroll,gyropitch;
 float roll,pitch, pitch_error, roll_error;
 float pitch_error_old, roll_error_old;
 float dt;
@@ -33,7 +28,7 @@ int x[15],ch1[15],ch[7],i;
 
  float throttle_input, pitch_input, roll_input, mode_input;
 
-int mode; //mode 1 - stabilize, mode 2 - acro , mode 3 - manual
+int mode;
 int mode_input_prev;
 
 float pitch_pidsum, roll_pidsum;
@@ -54,28 +49,29 @@ float d_roll = 0; float D_roll;
 
 void setup() {
   servo_setup();
-  rc_read_setup_ppm();
-  dmpsetup();
+  ppm_read_setup();
+  imu_setup();
   Serial.begin(115200);
-  //sdlog_setup();
+  sdlog_setup();
   delay(500);
 }
 
 void loop() {
   float StartTime = micros(); //start the timer to calculate looptime
 
-  rc_read_ppm();
-  find_mode();
-  dmploop();
-  //sdlog();
+  ppm_read_loop();
+  imu_loop();
+  sdlog();
+  servo_loop();
+
+// mode determination
   if (mode == 3){
     horizon_mode();
   }
   else{
     manual_mode();
   }
-
-  servo_loop();
+//end mode determineation
 
   float EndTime = micros();
   dt = (EndTime - StartTime); //calculate the time between gyro reading values for the complemenatary filter

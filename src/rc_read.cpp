@@ -2,7 +2,7 @@
 #include "BixFlight.h"
 #include "rc_read.h"
 
-void rc_read_setup_ppm(){
+void ppm_read_setup(){
   pinMode(3, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(3), rc_read_ppm2, FALLING);
  }
@@ -21,7 +21,7 @@ void rc_read_ppm2(){
               }
               }//copy store all values from temporary array another array after 15 reading
 
-void rc_read_ppm(){
+void ppm_read_loop(){
    int i,j,k=0;
    for(k=14;k>-1;k--){
      if(ch1[k]>10000){
@@ -38,9 +38,6 @@ void rc_read_ppm(){
    roll_input     = ch[1];
    pitch_input    = ch[2];
    mode_input     = ch[6];
-   }
-
-void find_mode(){
 
     if (mode_input > 1000 || mode_input < -1000){
       mode_input = mode_input_prev;

@@ -1,5 +1,5 @@
 #include "BixFlight.h"
-#include "sensor_dmp.h"
+#include "sensor.h"
 // I2C device class (I2Cdev) demonstration Arduino sketch for MPU6050 class using DMP (MotionApps v2.0)
 // 6/21/2012 by Jeff Rowberg <jeff@rowberg.net>
 // Updates should (hopefully) always be available at https://github.com/jrowberg/i2cdevlib
@@ -158,7 +158,7 @@ void dmpDataReady() {
 // ===                      INITIAL SETUP                       ===
 // ================================================================
 
-void dmpsetup() {
+void imu_setup() {
     // join I2C bus (I2Cdev library doesn't do this automatically)
     #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
         Wire.begin();
@@ -243,7 +243,7 @@ void dmpsetup() {
 // ===                    MAIN PROGRAM LOOP                     ===
 // ================================================================
 
-void dmploop() {
+void imu_loop() {
     // if programming failed, don't try to do anything
     if (!dmpReady) return;
 

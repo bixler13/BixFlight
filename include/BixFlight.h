@@ -1,9 +1,6 @@
 #ifndef BIXFLIGHT_H
 #define BIXFLIGHT_H
 
-extern float AccX,AccY,AccZ,Temp,GyroX,GyroY,GyroZ;
-extern float accpitch,accroll;
-extern float gyroroll,gyropitch;
 extern float roll,pitch, pitch_error, roll_error;
 extern float pitch_error_old, roll_error_old;
 extern float dt;
