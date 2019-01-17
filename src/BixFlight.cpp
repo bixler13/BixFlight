@@ -18,12 +18,11 @@ float pitch_error_old, roll_error_old, yaw_error_old;
 float dt;
 
 int SDchip_pin = 4; //digitial pin for sd card logging purposes
-
 int pitch_servo_pin = 8;
 int roll_servo1_pin = 9;
 int roll_servo2_pin = 10;
 
-float pitch_servo_angle = 90;
+float pitch_servo_angle = 90; //defined at 90 for startup loop to prevent overheating
 float roll_servo_angle = 90;
 float roll_servo2_angle = 90;
 
@@ -31,7 +30,7 @@ unsigned long int a,b,c;
 int x[15],ch1[15],ch[7],i;
 //specifing arrays and variables to store values
 
- float throttle_input, pitch_input, roll_input, mode_input;
+float throttle_input, pitch_input, roll_input, mode_input;
 
 int mode;
 int mode_input_prev;
