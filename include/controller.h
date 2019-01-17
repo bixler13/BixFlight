@@ -1,8 +1,7 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-extern float pitch_servo_angle;
-
-void controller();
-
+void manual_mode();
+void horizon_mode();
+void altitude_hold_mode();
 #endif

@@ -53,7 +53,6 @@ float d_roll = 0; float D_roll;
 
 
 void setup() {
-  //IMU_Setup();
   servo_setup();
   rc_read_setup_ppm();
   dmpsetup();
@@ -68,14 +67,15 @@ void loop() {
   rc_read_ppm();
   find_mode();
   dmploop();
-  //IMU_Read();
-  //IMU_Data();
-  //complimentary();
-
   //sdlog();
-  controller();
+  if (mode == 3){
+    horizon_mode();
+  }
+  else{
+    manual_mode();
+  }
+
   servo_loop();
-  //delay(10);
 
   float EndTime = micros();
   dt = (EndTime - StartTime); //calculate the time between gyro reading values for the complemenatary filter

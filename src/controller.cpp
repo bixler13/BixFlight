@@ -3,14 +3,14 @@
 #include "controller.h"
 #include "function.h"
 
-void controller(){
-  if (mode == 3){ //manual mode
+void manual_mode(){
+ //manual mode
     pitch_servo_angle = mapFloat(pitch_input, -1000, 1000, 50, 130);
     roll_servo2_angle = mapFloat(roll_input, -1000, 1000, 130 ,50);
     roll_servo_angle = mapFloat(roll_input, -1000, 1000, 130 ,50);
-  }
+}
 
-  else{
+  void horizon_mode(){
 //////////////////////////Pitch Axis/////////////////////////////
     //first we need to calculate error
     pitch_command = mapFloat(pitch_input,-1000,1000,-45,45);
@@ -53,4 +53,3 @@ void controller(){
     roll_servo2_angle = mapFloat(roll_servo_angle, 0, 180, 180 ,0);
     roll_servo_angle = mapFloat(roll_servo_angle, 0, 180, 180 ,0);
    }
-  }
