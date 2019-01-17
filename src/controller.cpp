@@ -20,10 +20,15 @@ void manual_mode(){
     P_pitch = p_pitch * pitch_error;
 
     //Calculate the Ki portion
-    if(pitch_servo_angle > 31 && pitch_servo_angle < 149){
+      if(throttle_input >= -500){
       I_pitch_old = ((pitch_error * dt)+I_pitch_old);
       I_pitch_new = I_pitch_old *i_pitch;
-    }
+      }
+      
+      else{
+        I_pitch_old = 0;
+        I_pitch_new = 0;
+      }
 
     //Calculate the Kd portion
     D_pitch = ((pitch_error - pitch_error_old)/dt)*d_pitch;
@@ -41,8 +46,15 @@ void manual_mode(){
     P_roll = p_roll * roll_error;
 
     //Calculate the Ki portion
+    if(throttle_input >= -500){
     I_roll_old = ((roll_error * dt)+I_roll_old);
     I_roll_new = I_roll_old *i_roll;
+    }
+
+    else{
+    I_pitch_old = 0;
+    I_pitch_new = 0;
+    }
 
     //Calculate the Kd portion
     D_roll = ((roll_error - roll_error_old)/dt)*d_roll;
