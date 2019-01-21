@@ -7,11 +7,11 @@
 #include "rc_read.h"
 #include "sdlog.h"
 
-//#define OUTPUT_IMU
+#define OUTPUT_IMU
 //#define OUTPUT_SERVO
-#define OUTPUT_INPUT
+//#define OUTPUT_INPUT
 
-//#define LOG_DATA // define this if you want to log data to SD
+#define LOG_DATA // define this if you want to log data to SD
 
 float roll, pitch, yaw, pitch_error, roll_error, yaw_error;
 float roll_old, pitch_old, roll_rate, pitch_rate;
@@ -19,10 +19,10 @@ float roll_rate_command, pitch_rate_command;
 float pitch_error_old, roll_error_old, yaw_error_old;
 float dt;
 
-int SDchip_pin = 4; //digitial pin for sd card logging purposes
+int SDchip_pin = 10; //digitial pin for sd card logging purposes
 int pitch_servo_pin = 8;
 int roll_servo1_pin = 9;
-int roll_servo2_pin = 10;
+int roll_servo2_pin = 7;
 
 float pitch_servo_angle = 90; //defined at 90 for startup loop to prevent overheating
 float roll_servo_angle = 90;
@@ -77,11 +77,12 @@ void loop() {
 //board loop///////////////////////////////////////////////////////////////////
   ppm_read_loop();
   imu_loop();
+  #ifdef LOG_DATA
+      sdlog_loop();
+  #endif
   servo_loop();
 
-  #ifdef LOG_DATA
-    sdlog_loop();
-  #endif
+
 //end board loop//////////////////////////////////////////////////////////////
 
 //mode determination/////////////////////////////////////////////////////////
