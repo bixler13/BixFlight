@@ -1,10 +1,10 @@
 #ifndef BIXFLIGHT_H
 #define BIXFLIGHT_H
 
-extern float AccX,AccY,AccZ,Temp,GyroX,GyroY,GyroZ;
-extern float accpitch,accroll;
-extern float gyroroll,gyropitch;
-extern float roll,pitch, pitch_error, roll_error;
+extern float roll, pitch, yaw, pitch_error, roll_error, yaw_error;
+extern float roll_old, pitch_old, roll_rate, pitch_rate;
+extern float roll_rate_command, pitch_rate_command;
+extern float pitch_error_old, roll_error_old, yaw_error_old;
 extern float dt;
 
 extern int SDchip_pin;
@@ -20,9 +20,9 @@ extern float roll_servo2_angle;
 extern unsigned long int a,b,c;
 extern int x[15],ch1[15],ch[7],i;
 
-extern float throttle_input, pitch_input, roll_input, mode_input;
+extern float throttle_input, pitch_input, yaw_input, roll_input, mode_input, switch_input;
 
-extern int mode; //mode 1 - stabilize, mode 2 - acro , mode 3 - manual
+extern int mode, swtch;
 extern int mode_input_prev;
 
 extern float pitch_pidsum, roll_pidsum;
