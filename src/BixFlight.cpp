@@ -7,7 +7,7 @@
 #include "rc_read.h"
 #include "sdlog.h"
 
-#define OUTPUT_IMU
+//#define OUTPUT_IMU
 //#define OUTPUT_SERVO
 //#define OUTPUT_INPUT
 
