@@ -2,6 +2,9 @@
 #include "sensor.h"
 #include "I2Cdev.h"
 #include "MPU6050_6Axis_MotionApps20.h"
+#include "rc_read.h"
+#include "actuator.h"
+#include "controller.h"
 //#include "MPU6050.h" // not necessary if using MotionApps include file
 
 // Arduino Wire library is required if I2Cdev I2CDEV_ARDUINO_WIRE implementation
@@ -132,6 +135,20 @@ void imu_loop() {
         // .
         // .
         // .
+        ppm_read_loop();
+        servo_loop();
+
+        //mode determination/////////////////////////////////////////////////////////
+          if (mode == 3){
+            manual_mode();
+          }
+          else if (mode ==2){
+            acro_mode();
+          }
+          else{
+            horizon_mode();
+          }
+        //end mode determineation////////////////////////////////////////////////////////
     }
 
     // reset interrupt flag and get INT_STATUS byte
@@ -192,6 +209,7 @@ void imu_loop() {
             //yaw = ypr[0]*57.3;
             pitch = ypr[2]*57.3;
             roll = ypr[1]*57.3;
+            yaw = ypr[0]*57.3;
             // Serial.print("ypr\t");
             // Serial.print(ypr[0] * 180/M_PI);
             // Serial.print("\t");
