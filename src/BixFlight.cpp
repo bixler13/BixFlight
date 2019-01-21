@@ -5,13 +5,10 @@
 #include "actuator.h"
 #include "controller.h"
 #include "rc_read.h"
-#include "sdlog.h"
 
 #define OUTPUT_IMU
 //#define OUTPUT_SERVO
 //#define OUTPUT_INPUT
-
-#define LOG_DATA // define this if you want to log data to SD
 
 float roll, pitch, yaw, pitch_error, roll_error, yaw_error;
 float roll_old, pitch_old, roll_rate, pitch_rate;
@@ -58,10 +55,6 @@ void setup() {
   servo_setup();
   ppm_read_setup();
   imu_setup();
-
-  #ifdef LOG_DATA
-    sdlog_setup();
-  #endif
 //end setup functions//////////////////////////////////////////////////////////
 
   #if defined(OUTPUT_IMU)  || defined(OUTPUT_INPUT) || defined(OUTPUT_SERVO)
@@ -77,9 +70,6 @@ void loop() {
 //board loop///////////////////////////////////////////////////////////////////
   ppm_read_loop();
   imu_loop();
-  #ifdef LOG_DATA
-      sdlog_loop();
-  #endif
   servo_loop();
 
 
