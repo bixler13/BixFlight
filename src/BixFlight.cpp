@@ -9,9 +9,9 @@
 
 //#define OUTPUT_IMU
 //#define OUTPUT_SERVO
-//#define OUTPUT_INPUT
+#define OUTPUT_INPUT
 
-#define LOG_DATA // define this if you want to log data to SD
+//#define LOG_DATA // define this if you want to log data to SD
 
 float roll, pitch, yaw, pitch_error, roll_error, yaw_error;
 float roll_old, pitch_old, roll_rate, pitch_rate;
@@ -32,9 +32,9 @@ unsigned long int a,b,c;
 int x[15],ch1[15],ch[7],i;
 //specifing arrays and variables to store values
 
-float throttle_input, pitch_input, roll_input, mode_input;
+float throttle_input, pitch_input, yaw_input, roll_input, mode_input, switch_input;
 
-int mode;
+int mode, swtch;
 int mode_input_prev;
 
 float pitch_pidsum, roll_pidsum;
@@ -86,13 +86,13 @@ void loop() {
 
 //mode determination/////////////////////////////////////////////////////////
   if (mode == 3){
-    horizon_mode();
+    manual_mode();
   }
   else if (mode ==2){
     acro_mode();
   }
   else{
-    manual_mode();
+    horizon_mode();
   }
 //end mode determineation////////////////////////////////////////////////////////
 
@@ -106,7 +106,7 @@ void loop() {
   Serial.print(" , ");
   Serial.print(yaw_input);
   Serial.print(" , ");
-  Serial.println(mode);
+  Serial.println(swtch);
 #endif
 
 #ifdef OUTPUT_IMU

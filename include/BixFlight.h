@@ -20,9 +20,9 @@ extern float roll_servo2_angle;
 extern unsigned long int a,b,c;
 extern int x[15],ch1[15],ch[7],i;
 
-extern float throttle_input, pitch_input, roll_input, mode_input;
+extern float throttle_input, pitch_input, yaw_input, roll_input, mode_input, switch_input;
 
-extern int mode; //mode 1 - stabilize, mode 2 - acro , mode 3 - manual
+extern int mode, swtch;
 extern int mode_input_prev;
 
 extern float pitch_pidsum, roll_pidsum;

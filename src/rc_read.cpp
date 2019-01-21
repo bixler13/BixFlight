@@ -38,6 +38,8 @@ void ppm_read_loop(){
    roll_input     = ch[1];
    pitch_input    = ch[2];
    mode_input     = ch[6];
+   yaw_input      = ch[4];
+   switch_input   = ch[5];
 
     if (mode_input > 1000 || mode_input < -1000){
       mode_input = mode_input_prev;
@@ -55,4 +57,12 @@ void ppm_read_loop(){
       mode = 2;
     }
     mode_input_prev = mode_input;
+
+  if (switch_input >= 0){
+    swtch = 1;
   }
+
+  else {
+    swtch = 0;
+  }
+}
