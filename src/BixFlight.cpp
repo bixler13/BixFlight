@@ -5,6 +5,7 @@
 #include "actuator.h"
 #include "controller.h"
 #include "rc_read.h"
+#include "sdwrite.h"
 
 #define OUTPUT_IMU
 //#define OUTPUT_SERVO
@@ -55,6 +56,7 @@ void setup() {
   servo_setup();
   ppm_read_setup();
   imu_setup();
+  sdwrite_setup();
 //end setup functions//////////////////////////////////////////////////////////
 
   #if defined(OUTPUT_IMU)  || defined(OUTPUT_INPUT) || defined(OUTPUT_SERVO)
@@ -70,14 +72,27 @@ void loop() {
 //board loop///////////////////////////////////////////////////////////////////
 
   imu_loop();
+  ppm_read_loop();
+  servo_loop();
+  sdwrite_loop();
 
+  //mode determination/////////////////////////////////////////////////////////
+    if (mode == 3){
+      manual_mode();
+    }
+    else if (mode ==2){
+      acro_mode();
+    }
+    else{
+      horizon_mode();
+    }
+  //end mode determineation////////////////////////////////////////////////////////
 
 
 //end board loop//////////////////////////////////////////////////////////////
 
-
-
 //serial printing////////////////////////////////////////////////////////////////
+
 #ifdef OUTPUT_INPUT
   Serial.print(throttle_input);
   Serial.print(" , ");
