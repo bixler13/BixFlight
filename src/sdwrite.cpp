@@ -21,14 +21,14 @@
 
     void sdwrite_loop(){
 
-        char dataString[10];
+        char dataString[20];
         int roll_write = roll;
         int pitch_write = pitch;
         int pitchin_write = pitch_input;
         int rollin_write = roll_input;
 
 
-        sprintf(dataString, "%d ,%d\n", roll_write, pitch_write);
+        sprintf(dataString, "%d ,%d ,%d ,%d\n", roll_write, pitch_write, pitchin_write, rollin_write);
 
         csvFile.write(dataString);
 
