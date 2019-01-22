@@ -14,7 +14,6 @@
     }
 
     void sdlog(){
-      //csvFile.close();
       csvFile.flush();
       csvFile.open("data.csv", O_CREAT | O_APPEND | O_WRITE);
       counter = 0;
@@ -22,20 +21,23 @@
 
     void sdwrite_loop(){
 
-        char dataString[5];
+        char dataString[10];
         int roll_write = roll;
+        int pitch_write = pitch;
+        int pitchin_write = pitch_input;
+        int rollin_write = roll_input;
 
 
-        sprintf(dataString, "%d ,", roll_write);
+        sprintf(dataString, "%d ,%d\n", roll_write, pitch_write);
 
         csvFile.write(dataString);
 
-          if(counter >= 10){
+          if(counter >= 1000){
             sdlog();
           }
 
           counter ++;
-          Serial.println(counter);
+          //Serial.println(sizeof(dataString));
         }
 
 
