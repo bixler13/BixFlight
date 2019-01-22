@@ -106,13 +106,13 @@ void loop() {
 #endif
 
 #ifdef OUTPUT_IMU
-  Serial.print(roll);
-  Serial.print(" , ");
-  Serial.print(pitch);
-  Serial.print(" , ");
-  Serial.print(yaw);
-  Serial.print(" , ");
-  Serial.println(dt,3);
+  // Serial.print(roll);
+  // Serial.print(" , ");
+  // Serial.print(pitch);
+  // Serial.print(" , ");
+  // Serial.print(yaw);
+  // Serial.print(" , ");
+  // Serial.println(dt,3);
 #endif
 
 #ifdef OUTPUT_SERVO
