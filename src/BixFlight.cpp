@@ -1,5 +1,5 @@
 #include <arduino.h>
-#include <servo.h>
+#include <Servo.h>
 #include "sensor.h"
 #include "BixFlight.h"
 #include "actuator.h"
@@ -7,9 +7,10 @@
 #include "rc_read.h"
 #include "sdwrite.h"
 
-#define OUTPUT_IMU
+//#define OUTPUT_IMU
 //#define OUTPUT_SERVO
 //#define OUTPUT_INPUT
+#define OUTPUT_OTHER;
 
 float roll, pitch, yaw, pitch_error, roll_error, yaw_error;
 float roll_old, pitch_old, roll_rate, pitch_rate;
@@ -59,7 +60,7 @@ void setup() {
   sdwrite_setup();
 //end setup functions//////////////////////////////////////////////////////////
 
-  #if defined(OUTPUT_IMU)  || defined(OUTPUT_INPUT) || defined(OUTPUT_SERVO)
+  #if defined(OUTPUT_IMU)  || defined(OUTPUT_INPUT) || defined(OUTPUT_SERVO) || defined(OUTPUT_OTHER)
     Serial.begin(115200);
   #endif
 
@@ -122,10 +123,16 @@ void loop() {
   Serial.print(" , ");
   Serial.println(roll_servo2_angle);
 #endif
+
+#ifdef OUTPUT_OTHER
+  Serial.print(dt);
+  Serial.print(" , ");
+  Serial.println(roll);
+#endif
 //end serial printing/////////////////////////////////////////////////////////
 
   float EndTime = micros();
   dt = (EndTime - StartTime); //calculate the time between gyro reading values for the complemenatary filter
-  dt = (dt) / 1000000; //convert to seconds
+  dt = (dt) / 1000; //convert to miliseconds
 
 }

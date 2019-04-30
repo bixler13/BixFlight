@@ -1,4 +1,4 @@
-#include <servo.h>
+#include <Servo.h>
 #include "actuator.h"
 #include "BixFlight.h"
 
