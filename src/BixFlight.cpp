@@ -51,6 +51,7 @@ float p_roll = 1.5; float P_roll;
 float i_roll = 0; float I_roll_old; float I_roll_new;
 float d_roll = 0; float D_roll;
 
+unsigned long time = 0;
 
 void setup() {
 //setup functions/////////////////////////////////////////////////////////////
@@ -68,7 +69,7 @@ void setup() {
 }
 
 void loop() {
-  float StartTime = micros(); //start the timer to calculate looptime
+time = millis(); //recrod starting time for looptime
 
 //board loop///////////////////////////////////////////////////////////////////
 
@@ -131,8 +132,6 @@ void loop() {
 #endif
 //end serial printing/////////////////////////////////////////////////////////
 
-  float EndTime = micros();
-  dt = (EndTime - StartTime); //calculate the time between gyro reading values for the complemenatary filter
-  dt = (dt) / 1000; //convert to miliseconds
+  dt = millis() - time; //cacluatlate how long this loop took (ms)
 
 }
