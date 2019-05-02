@@ -15,7 +15,11 @@ void servo_setup(){
 }
 
 void servo_loop(){
-  pitch_servo.write(pitch_servo_angle);
-  roll_servo1.write(roll_servo_angle);
-  roll_servo2.write(roll_servo2_angle);
+  //pitch_servo.write(act.pwm[1]);
+  //roll_servo1.write(act.pwm[2]);
+  //roll_servo2.write(act.pwm[3]);
+
+  pitch_servo.write(90);
+  roll_servo1.write(90);
+  roll_servo2.write(90);
 }

@@ -2,7 +2,10 @@
 #include "sensor.h"
 #include "I2Cdev.h"
 #include "MPU6050_6Axis_MotionApps20.h"
+#include "common.h"
 //#include "MPU6050.h" // not necessary if using MotionApps include file
+
+
 
 // Arduino Wire library is required if I2Cdev I2CDEV_ARDUINO_WIRE implementation
 // is used in I2Cdev.h
@@ -16,22 +19,6 @@
 // AD0 high = 0x69
 MPU6050 mpu;
 //MPU6050 mpu(0x69); // <-- use for AD0 high
-
-
-#define OUTPUT_READABLE_YAWPITCHROLL
-
-// uncomment "OUTPUT_READABLE_REALACCEL" if you want to see acceleration
-// components with gravity removed. This acceleration reference frame is
-// not compensated for orientation, so +X is always +X according to the
-// sensor, just without the effects of gravity. If you want acceleration
-// compensated for orientation, us OUTPUT_READABLE_WORLDACCEL instead.
-//#define OUTPUT_READABLE_REALACCEL
-
-// uncomment "OUTPUT_READABLE_WORLDACCEL" if you want to see acceleration
-// components with gravity removed and adjusted for the world frame of
-// reference (yaw is relative to initial orientation, since no magnetometer
-// is present in this case). Could be quite handy in some cases.
-//#define OUTPUT_READABLE_WORLDACCEL
 
 #define INTERRUPT_PIN 2  // use pin 2 on Arduino Uno & most boards
 #define LED_PIN 13 // (Arduino is 13, Teensy is 11, Teensy++ is 6)
@@ -62,8 +49,6 @@ volatile bool mpuInterrupt = false;     // indicates whether MPU interrupt pin h
 void dmpDataReady() {
     mpuInterrupt = true;
 }
-
-
 
 // ================================================================
 // ===                      INITIAL SETUP                       ===
@@ -159,76 +144,61 @@ void imu_loop() {
         // (this lets us immediately read more without waiting for an interrupt)
         fifoCount -= packetSize;
 
-        #ifdef OUTPUT_READABLE_QUATERNION
+
             // display quaternion values in easy matrix form: w x y z
-            mpu.dmpGetQuaternion(&q, fifoBuffer);
-            Serial.print("quat\t");
-            Serial.print(q.w);
-            Serial.print("\t");
-            Serial.print(q.x);
-            Serial.print("\t");
-            Serial.print(q.y);
-            Serial.print("\t");
-            Serial.println(q.z);
-        #endif
+            // mpu.dmpGetQuaternion(&q, fifoBuffer);
+            // Serial.print("quat\t");
+            // Serial.print(q.w);
+            // Serial.print("\t");
+            // Serial.print(q.x);
+            // Serial.print("\t");
+            // Serial.print(q.y);
+            // Serial.print("\t");
+            // Serial.println(q.z);
 
-        #ifdef OUTPUT_READABLE_EULER
+
             // display Euler angles in degrees
-            mpu.dmpGetQuaternion(&q, fifoBuffer);
-            mpu.dmpGetEuler(euler, &q);
-            Serial.print("euler\t");
-            Serial.print(euler[0] * 180/M_PI);
-            Serial.print("\t");
-            Serial.print(euler[1] * 180/M_PI);
-            Serial.print("\t");
-            Serial.println(euler[2] * 180/M_PI);
-        #endif
+            // mpu.dmpGetQuaternion(&q, fifoBuffer);
+            // mpu.dmpGetEuler(euler, &q);
+            // Serial.print("euler\t");
+            // Serial.print(euler[0] * 180/M_PI);
+            // Serial.print("\t");
+            // Serial.print(euler[1] * 180/M_PI);
+            // Serial.print("\t");
+            // Serial.println(euler[2] * 180/M_PI);
 
-        #ifdef OUTPUT_READABLE_YAWPITCHROLL
             // display Euler angles in degrees
             mpu.dmpGetQuaternion(&q, fifoBuffer);
             mpu.dmpGetGravity(&gravity, &q);
             mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-            //yaw = ypr[0]*57.3;
-            pitch = ypr[2]*57.3;
-            roll = ypr[1]*57.3;
-            yaw = ypr[0]*57.3;
-            // Serial.print("ypr\t");
-            // Serial.print(ypr[0] * 180/M_PI);
-            // Serial.print("\t");
-            // Serial.print(ypr[1] * 180/M_PI);
-            // Serial.print("\t");
-            // Serial.println(ypr[2] * 180/M_PI);
-        #endif
+            att.raw[YAW] = ypr[0]*57.30; //yaw
+            att.raw[PITCH] = ypr[2]*-57.30; //pitch
+            att.raw[ROLL] = ypr[1]*57.30; //roll
 
-        #ifdef OUTPUT_READABLE_REALACCEL
             // display real acceleration, adjusted to remove gravity
-            mpu.dmpGetQuaternion(&q, fifoBuffer);
-            mpu.dmpGetAccel(&aa, fifoBuffer);
-            mpu.dmpGetGravity(&gravity, &q);
-            mpu.dmpGetLinearAccel(&aaReal, &aa, &gravity);
-            Serial.print("areal\t");
-            Serial.print(aaReal.x);
-            Serial.print("\t");
-            Serial.print(aaReal.y);
-            Serial.print("\t");
-            Serial.println(aaReal.z);
-        #endif
+            // mpu.dmpGetQuaternion(&q, fifoBuffer);
+            // mpu.dmpGetAccel(&aa, fifoBuffer);
+            // mpu.dmpGetGravity(&gravity, &q);
+            // mpu.dmpGetLinearAccel(&aaReal, &aa, &gravity);
+            // Serial.print("areal\t");
+            // Serial.print(aaReal.x);
+            // Serial.print("\t");
+            // Serial.print(aaReal.y);
+            // Serial.print("\t");
+            // Serial.println(aaReal.z);
 
-        #ifdef OUTPUT_READABLE_WORLDACCEL
             // display initial world-frame acceleration, adjusted to remove gravity
             // and rotated based on known orientation from quaternion
-            mpu.dmpGetQuaternion(&q, fifoBuffer);
-            mpu.dmpGetAccel(&aa, fifoBuffer);
-            mpu.dmpGetGravity(&gravity, &q);
-            mpu.dmpGetLinearAccel(&aaReal, &aa, &gravity);
-            mpu.dmpGetLinearAccelInWorld(&aaWorld, &aaReal, &q);
-            Serial.print("aworld\t");
-            Serial.print(aaWorld.x);
-            Serial.print("\t");
-            Serial.print(aaWorld.y);
-            Serial.print("\t");
-            Serial.println(aaWorld.z);
-        #endif
+            // mpu.dmpGetQuaternion(&q, fifoBuffer);
+            // mpu.dmpGetAccel(&aa, fifoBuffer);
+            // mpu.dmpGetGravity(&gravity, &q);
+            // mpu.dmpGetLinearAccel(&aaReal, &aa, &gravity);
+            // mpu.dmpGetLinearAccelInWorld(&aaWorld, &aaReal, &q);
+            // Serial.print("aworld\t");
+            // Serial.print(aaWorld.x);
+            // Serial.print("\t");
+            // Serial.print(aaWorld.y);
+            // Serial.print("\t");
+            // Serial.println(aaWorld.z);
     }
 }

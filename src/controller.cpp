@@ -2,21 +2,36 @@
 #include <arduino.h>
 #include "controller.h"
 #include "function.h"
+#include "common.h"
+
+void controller_loop(){
+  //mode determination/////////////////////////////////////////////////////////
+    if (mode == 3){
+      manual_mode();
+    }
+    else if (mode ==2){
+      acro_mode();
+    }
+    else{
+      horizon_mode();
+    }
+  //end mode determineation////////////////////////////////////////////////////////
+}
 
 void manual_mode(){
  //manual mode
-    pitch_servo_angle = mapFloat(pitch_input, -1000, 1000, 50, 130);
-    roll_servo2_angle = mapFloat(roll_input, -1000, 1000, 130 ,50);
-    roll_servo_angle = mapFloat(roll_input, -1000, 1000, 130 ,50);
+    act.pwm[1] = mapFloat(pitch_input, -1000, 1000, 50, 130);
+    act.pwm[2] = mapFloat(roll_input, -1000, 1000, 130 ,50);
+    act.pwm[3] = mapFloat(roll_input, -1000, 1000, 130 ,50);
 }
 
-  void horizon_mode(){
+void horizon_mode(){
 //////////////////////////Pitch Axis/////////////////////////////
     //first we need to calculate error
     pitch_command = mapFloat(pitch_input,-1000,1000,-45,45);
     roll_command = mapFloat(roll_input, -1000, 1000, -30,30);
-    pitch_error = pitch_command-pitch;
-    roll_error = roll_command-roll;
+    pitch_error = pitch_command-att.raw[PITCH];
+    roll_error = roll_command-att.raw[ROLL];
 
     //Calculate the Kp porition
     P_pitch = p_pitch * pitch_error;
@@ -46,10 +61,10 @@ void manual_mode(){
 
     pitch_pidsum = (P_pitch + I_pitch_new + D_pitch); //sum the contributions
     roll_pidsum = (P_roll + I_roll_new + D_roll); //sum the contributions
-    pitch_servo_angle = constrain(pitch_servo_center + pitch_pidsum, 30, 150); //take in account for the servo center (trim)
-    roll_servo_angle = constrain(roll_servo_center + roll_pidsum, 30, 150); //take in account for the servo center (trim)
-    roll_servo2_angle = mapFloat(roll_servo_angle, 0, 180, 180 ,0);
-    roll_servo_angle = mapFloat(roll_servo_angle, 0, 180, 180 ,0);
+    act.pwm[1] = constrain(pitch_servo_center + pitch_pidsum, 30, 150); //take in account for the servo center (trim)
+    act.pwm[2] = constrain(roll_servo_center + roll_pidsum, 30, 150); //take in account for the servo center (trim)
+    act.pwm[3] = mapFloat(act.pwm[2], 0, 180, 180 ,0);
+    act.pwm[2] = mapFloat(act.pwm[2], 0, 180, 180 ,0);
    }
 
    void acro_mode(){

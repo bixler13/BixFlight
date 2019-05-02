@@ -6,17 +6,18 @@
 #include "controller.h"
 #include "rc_read.h"
 #include "sdwrite.h"
+#include "common.h"
 
 //#define OUTPUT_IMU
-//#define OUTPUT_SERVO
+#define OUTPUT_SERVO
 //#define OUTPUT_INPUT
-#define OUTPUT_OTHER;
+//#define OUTPUT_OTHER
 
 float roll, pitch, yaw, pitch_error, roll_error, yaw_error;
 float roll_old, pitch_old, roll_rate, pitch_rate;
 float roll_rate_command, pitch_rate_command;
 float pitch_error_old, roll_error_old, yaw_error_old;
-float dt;
+float dt = .02;
 
 int SDchip_pin = 10; //digitial pin for sd card logging purposes
 int pitch_servo_pin = 8;
@@ -53,6 +54,11 @@ float d_roll = 0; float D_roll;
 
 unsigned long time = 0;
 
+uint32_t currentTime = 0;
+uint16_t previousTime = 0;
+uint16_t cycleTime = 0;     // this is the number in micro second to achieve a full loop, it can differ a little and is taken into account in the PID loop
+#define LOOP_TIME 20000 //20,000 = 50hz
+
 void setup() {
 //setup functions/////////////////////////////////////////////////////////////
   servo_setup();
@@ -71,24 +77,15 @@ void setup() {
 void loop() {
 time = millis(); //recrod starting time for looptime
 
-//board loop///////////////////////////////////////////////////////////////////
+//board loop sceduler///////////////////////////////////////////////////////////////////
 
-  imu_loop();
-  ppm_read_loop();
-  servo_loop();
-  sdwrite_loop();
+  imu_loop(); //get imu data
+  ppm_read_loop(); //get rc data
+  controller_loop();
+  servo_loop(); //write to servos
+  //sdwrite_loop(); //write to sd card
 
-  //mode determination/////////////////////////////////////////////////////////
-    if (mode == 3){
-      manual_mode();
-    }
-    else if (mode ==2){
-      acro_mode();
-    }
-    else{
-      horizon_mode();
-    }
-  //end mode determineation////////////////////////////////////////////////////////
+
 
 
 //end board loop//////////////////////////////////////////////////////////////
@@ -108,30 +105,41 @@ time = millis(); //recrod starting time for looptime
 #endif
 
 #ifdef OUTPUT_IMU
-  // Serial.print(roll);
-  // Serial.print(" , ");
-  // Serial.print(pitch);
-  // Serial.print(" , ");
-  // Serial.print(yaw);
-  // Serial.print(" , ");
-  // Serial.println(dt,3);
+  Serial.print(att.raw[YAW]);
+  Serial.print(" , ");
+  Serial.print(att.raw[PITCH]);
+  Serial.print(" , ");
+  Serial.print(att.raw[ROLL]);
+  Serial.print(" , ");
+  Serial.println(cycleTime);
 #endif
 
 #ifdef OUTPUT_SERVO
-  Serial.print(pitch_servo_angle);
+  Serial.print(act.pwm[1]);
   Serial.print(" , ");
-  Serial.print(roll_servo_angle);
+  Serial.print(act.pwm[2]);
   Serial.print(" , ");
-  Serial.println(roll_servo2_angle);
+  Serial.println(act.pwm[3]);
 #endif
 
 #ifdef OUTPUT_OTHER
-  Serial.print(dt);
+  Serial.print(act.pwm[1]);
   Serial.print(" , ");
-  Serial.println(roll);
+  Serial.print(cycleTime);
+  Serial.print(" , ");
+  Serial.println(att.raw[0]);
 #endif
 //end serial printing/////////////////////////////////////////////////////////
 
-  dt = millis() - time; //cacluatlate how long this loop took (ms)
+  while(1) {
+    currentTime = micros();
+    cycleTime = currentTime - previousTime;
+    #if defined(LOOP_TIME)
+      if (cycleTime >= LOOP_TIME) break;
+    #else
+      break;
+    #endif
+      }
+  previousTime = currentTime;
 
 }
