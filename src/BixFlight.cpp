@@ -8,8 +8,8 @@
 #include "sdwrite.h"
 #include "common.h"
 
-//#define OUTPUT_IMU
-#define OUTPUT_SERVO
+#define OUTPUT_IMU
+//#define OUTPUT_SERVO
 //#define OUTPUT_INPUT
 //#define OUTPUT_OTHER
 
@@ -20,10 +20,12 @@ float pitch_error_old, roll_error_old, yaw_error_old;
 float dt = .02;
 
 int SDchip_pin = 10; //digitial pin for sd card logging purposes
+int thro_servo_pin = 11;
 int pitch_servo_pin = 8;
 int roll_servo1_pin = 9;
 int roll_servo2_pin = 7;
 
+float thro_servo_angle = 0;
 float pitch_servo_angle = 90; //defined at 90 for startup loop to prevent overheating
 float roll_servo_angle = 90;
 float roll_servo2_angle = 90;
@@ -52,12 +54,7 @@ float p_roll = 1.5; float P_roll;
 float i_roll = 0; float I_roll_old; float I_roll_new;
 float d_roll = 0; float D_roll;
 
-unsigned long time = 0;
-
-uint32_t currentTime = 0;
-uint16_t previousTime = 0;
-uint16_t cycleTime = 0;     // this is the number in micro second to achieve a full loop, it can differ a little and is taken into account in the PID loop
-#define LOOP_TIME 20000 //20,000 = 50hz
+//#define LOOP_TIME 10000 //20,000 = 50hz 10,000 = 100hz
 
 void setup() {
 //setup functions/////////////////////////////////////////////////////////////
@@ -75,7 +72,6 @@ void setup() {
 }
 
 void loop() {
-time = millis(); //recrod starting time for looptime
 
 //board loop sceduler///////////////////////////////////////////////////////////////////
 
@@ -83,10 +79,7 @@ time = millis(); //recrod starting time for looptime
   ppm_read_loop(); //get rc data
   controller_loop();
   servo_loop(); //write to servos
-  //sdwrite_loop(); //write to sd card
-
-
-
+  sdwrite_loop(); //write to sd card
 
 //end board loop//////////////////////////////////////////////////////////////
 
@@ -111,7 +104,9 @@ time = millis(); //recrod starting time for looptime
   Serial.print(" , ");
   Serial.print(att.raw[ROLL]);
   Serial.print(" , ");
-  Serial.println(cycleTime);
+  Serial.print(time.cycleTime);
+  Serial.print(" , ");
+  Serial.println(time.totalTime);
 #endif
 
 #ifdef OUTPUT_SERVO
@@ -125,21 +120,22 @@ time = millis(); //recrod starting time for looptime
 #ifdef OUTPUT_OTHER
   Serial.print(act.pwm[1]);
   Serial.print(" , ");
-  Serial.print(cycleTime);
+  Serial.print(time.cycleTime);
   Serial.print(" , ");
   Serial.println(att.raw[0]);
 #endif
 //end serial printing/////////////////////////////////////////////////////////
 
   while(1) {
-    currentTime = micros();
-    cycleTime = currentTime - previousTime;
+    time.currentTime = micros();
+    time.cycleTime = time.currentTime - time.previousTime;
     #if defined(LOOP_TIME)
-      if (cycleTime >= LOOP_TIME) break;
+      if (time.cycleTime >= LOOP_TIME) break;
     #else
       break;
     #endif
       }
-  previousTime = currentTime;
+  time.previousTime = time.currentTime;
+  time.totalTime = time.totalTime + time.cycleTime;
 
 }

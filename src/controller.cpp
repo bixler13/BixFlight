@@ -61,7 +61,7 @@ void horizon_mode(){
 
     pitch_pidsum = (P_pitch + I_pitch_new + D_pitch); //sum the contributions
     roll_pidsum = (P_roll + I_roll_new + D_roll); //sum the contributions
-    act.pwm[1] = constrain(pitch_servo_center + pitch_pidsum, 30, 150); //take in account for the servo center (trim)
+    act.pwm[1] = constrain(pitch_servo_center - pitch_pidsum, 30, 150); //take in account for the servo center (trim)
     act.pwm[2] = constrain(roll_servo_center + roll_pidsum, 30, 150); //take in account for the servo center (trim)
     act.pwm[3] = mapFloat(act.pwm[2], 0, 180, 180 ,0);
     act.pwm[2] = mapFloat(act.pwm[2], 0, 180, 180 ,0);

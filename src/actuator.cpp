@@ -1,25 +1,33 @@
 #include <Servo.h>
 #include "actuator.h"
 #include "BixFlight.h"
+#include "common.h"
 
+#define USE_SERVO
 
-Servo pitch_servo;
-Servo roll_servo1;
-Servo roll_servo2;
+Servo servo1;
+Servo servo2;
+Servo servo3;
+Servo servo4;
 
 
 void servo_setup(){
-  pitch_servo.attach(pitch_servo_pin);
-  roll_servo1.attach(roll_servo1_pin);
-  roll_servo2.attach(roll_servo2_pin);
+  servo1.attach(thro_servo_pin);
+  servo2.attach(pitch_servo_pin);
+  servo3.attach(roll_servo1_pin);
+  servo4.attach(roll_servo2_pin);
 }
 
 void servo_loop(){
-  //pitch_servo.write(act.pwm[1]);
-  //roll_servo1.write(act.pwm[2]);
-  //roll_servo2.write(act.pwm[3]);
 
-  pitch_servo.write(90);
-  roll_servo1.write(90);
-  roll_servo2.write(90);
+  #if(defined(USE_SERVO))
+    servo2.write(act.pwm[1]);
+    servo3.write(act.pwm[2]);
+    servo4.write(act.pwm[3]);
+  #else
+    servo1.write(0); //throttle
+    servo2.write(90);
+    servo3.write(90);
+    servo4.write(90);
+  #endif
 }
