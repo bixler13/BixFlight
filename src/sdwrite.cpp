@@ -32,8 +32,8 @@
         int time_write = time.totalTime/1000;
         int roll_write = att.raw[ROLL];
         int pitch_write = att.raw[PITCH];
-        int rollin_write = roll_input;
-        int pitchin_write = pitch_input;
+        int rollin_write = command.input[ROLL];
+        int pitchin_write = command.input[PITCH];
         int pitch_servo_write = act.pwm[1];
         int roll_servo_write = act.pwm[2];
         int roll_servo2_write = act.pwm[3];
@@ -50,32 +50,3 @@
           counter ++;
           //Serial.println(sizeof(dataString));
         }
-
-        //#include "CircularBuffer.h"
-        //CircularBuffer<int,25> buffer;       // uses 319 bytes //we have 2000
-
-        //
-        // // Write to current buffer
-        // //int dt = dt;
-        // int roll_write = roll;
-        // //int pitch_write = pitch;
-        // //int yaw_write = yaw;
-        //
-        // buffer.push(roll_write);
-        //
-        // // If buffer full...
-        // if(buffer.isFull()){
-        //
-        //   String dataString = "";
-        //
-        //   for( int i = 0; i < 25; i++){ //conver to string
-        //   dataString += String(buffer[i]);
-        //   dataString += ",";
-        //   }
-        //
-        //   File dataFile = Sd.open("data.csv", O_CREAT | O_APPEND | O_WRITE);
-        //   dataFile.print(dataString);
-        //   dataFile.close();
-        //   dataFile.flush();
-        //   buffer.clear();
-        // }

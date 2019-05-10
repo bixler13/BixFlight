@@ -8,16 +8,10 @@
 #include "sdwrite.h"
 #include "common.h"
 
-#define OUTPUT_IMU
+//#define OUTPUT_IMU
 //#define OUTPUT_SERVO
 //#define OUTPUT_INPUT
 //#define OUTPUT_OTHER
-
-float roll, pitch, yaw, pitch_error, roll_error, yaw_error;
-float roll_old, pitch_old, roll_rate, pitch_rate;
-float roll_rate_command, pitch_rate_command;
-float pitch_error_old, roll_error_old, yaw_error_old;
-float dt = .02;
 
 int SDchip_pin = 10; //digitial pin for sd card logging purposes
 int thro_servo_pin = 11;
@@ -25,38 +19,29 @@ int pitch_servo_pin = 8;
 int roll_servo1_pin = 9;
 int roll_servo2_pin = 7;
 
-float thro_servo_angle = 0;
-float pitch_servo_angle = 90; //defined at 90 for startup loop to prevent overheating
-float roll_servo_angle = 90;
-float roll_servo2_angle = 90;
-
 unsigned long int a,b,c;
 int x[15],ch1[15],ch[7],i;
 //specifing arrays and variables to store values
-
-float throttle_input, pitch_input, yaw_input, roll_input, mode_input, switch_input;
-
-int mode, swtch;
-int mode_input_prev;
 
 float pitch_pidsum, roll_pidsum;
 float pitch_command, roll_command;
 
 //Pitch Axis Params
-int pitch_servo_center = 90; //Adjust this value to trim the aircraft
-float p_pitch = .9; float P_pitch;
+float p_pitch = .7; float P_pitch;
 float i_pitch = 0; float I_pitch_old; float I_pitch_new;
 float d_pitch = 0; float D_pitch;
 
 //Roll Axis Params
-int roll_servo_center = 90; //Adjust this value to trim the aircraft
-float p_roll = 1.5; float P_roll;
+float p_roll = .7; float P_roll;
 float i_roll = 0; float I_roll_old; float I_roll_new;
 float d_roll = 0; float D_roll;
 
 //#define LOOP_TIME 10000 //20,000 = 50hz 10,000 = 100hz
 
 void setup() {
+
+  act.center[ROLL] = 90;
+  act.center[PITCH] = 90;
 //setup functions/////////////////////////////////////////////////////////////
   servo_setup();
   ppm_read_setup();
@@ -64,9 +49,9 @@ void setup() {
   sdwrite_setup();
 //end setup functions//////////////////////////////////////////////////////////
 
-  #if defined(OUTPUT_IMU)  || defined(OUTPUT_INPUT) || defined(OUTPUT_SERVO) || defined(OUTPUT_OTHER)
+  //#if defined(OUTPUT_IMU)  || defined(OUTPUT_INPUT) || defined(OUTPUT_SERVO) || defined(OUTPUT_OTHER)
     Serial.begin(115200);
-  #endif
+  //#endif
 
   delay(500); //delay to prepare for loop to bein
 }
@@ -86,15 +71,15 @@ void loop() {
 //serial printing////////////////////////////////////////////////////////////////
 
 #ifdef OUTPUT_INPUT
-  Serial.print(throttle_input);
+  Serial.print(command.input[THROTTLE]);
   Serial.print(" , ");
-  Serial.print(pitch_input);
+  Serial.print(command.input[PITCH]);
   Serial.print(" , ");
-  Serial.print(roll_input);
+  Serial.print(command.input[ROLL]);
   Serial.print(" , ");
-  Serial.print(yaw_input);
+  Serial.print(command.input[YAW]);
   Serial.print(" , ");
-  Serial.println(swtch);
+  Serial.println(command.input[MODE]);
 #endif
 
 #ifdef OUTPUT_IMU
@@ -120,11 +105,17 @@ void loop() {
 #ifdef OUTPUT_OTHER
   Serial.print(act.pwm[1]);
   Serial.print(" , ");
-  Serial.print(time.cycleTime);
+  Serial.print(act.pwm[2]);
   Serial.print(" , ");
-  Serial.println(att.raw[0]);
+  Serial.println(command.mode);
 #endif
 //end serial printing/////////////////////////////////////////////////////////
+
+if (Serial.available() > 0) {
+        // read the incoming byte:
+        p_pitch = Serial.parseInt();
+        Serial.println(p_pitch);
+      }
 
   while(1) {
     time.currentTime = micros();

@@ -1,6 +1,7 @@
 #include <arduino.h>
 #include "BixFlight.h"
 #include "rc_read.h"
+#include "common.h"
 
 void ppm_read_setup(){
   pinMode(3, INPUT_PULLUP);
@@ -34,35 +35,35 @@ void ppm_read_loop(){
        ch[i]=map(ch[i], 0, 1000, -1000, 1000);
        }
 
-   throttle_input = ch[3];
-   roll_input     = ch[1];
-   pitch_input    = ch[2];
-   mode_input     = ch[6];
-   yaw_input      = ch[4];
-   switch_input   = ch[5];
+   command.input[THROTTLE] = ch[3];
+   command.input[ROLL]     = ch[1];
+   command.input[PITCH]    = ch[2];
+   command.input[MODE]     = ch[6];
+   command.input[YAW]     = ch[4];
+   command.input[SWITCH]   = ch[5];
 
-    if (mode_input > 1000 || mode_input < -1000){
-      mode_input = mode_input_prev;
+    if (command.input[MODE] > 1000 || command.input[MODE] < -1000){
+      command.input[MODE] = command.inputp[MODE];
     }
 
-    if (mode_input > 200){
-      mode = 1;
+    if (command.input[MODE] > 200){
+      command.mode = 1;
     }
 
-    else if (mode_input < -200){
-      mode = 3;
+    else if (command.input[MODE] < -200){
+      command.mode = 3;
     }
 
     else {
-      mode = 2;
+      command.mode = 2;
     }
-    mode_input_prev = mode_input;
+    command.inputp[MODE] = command.input[MODE];
 
-  if (switch_input >= 0){
-    swtch = 1;
+  if (command.input[SWITCH] >= 0){
+    command.swtch = 1;
   }
 
   else {
-    swtch = 0;
+    command.swtch = 0;
   }
 }
