@@ -20,9 +20,9 @@ void controller_loop(){
 
 void manual_mode(){
  //manual mode
-    act.pwm[1] = mapFloat(command.input[PITCH], 1000, 2000, 1250, 1750);
-    act.pwm[2] = mapFloat(command.input[ROLL], 1000, 2000, 1250 ,1750);
-    act.pwm[3] = mapFloat(command.input[ROLL], 1000, 2000, 1250 ,1750);
+    act.pwm[SERVO1] = mapFloat(command.input[PITCH], 1000, 2000, 1250, 1750);
+    act.pwm[SERVO2] = mapFloat(command.input[ROLL], 1000, 2000, 1250 ,1750);
+    act.pwm[SERVO3] = mapFloat(command.input[ROLL], 1000, 2000, 1250 ,1750);
 }
 
 void horizon_mode(){
@@ -51,20 +51,18 @@ void horizon_mode(){
 
     pitch_pidsum = (P_pitch + I_pitch_new + D_pitch); //sum the contributions
     roll_pidsum = (P_roll + I_roll_new + D_roll); //sum the contributions
-    act.pwm[1] = constrain(act.center[1] - pitch_pidsum, 1250, 1750); //take in account for the servo center (trim)
-    act.pwm[2] = constrain(act.center[2] + roll_pidsum, 1250, 1750); //take in account for the servo center (trim)
-    act.pwm[2] = act.center[ROLL] + roll_pidsum;
-    act.pwm[3] = mapFloat(act.pwm[2], 1000, 2000, 2000 ,1000);
-    act.pwm[2] = mapFloat(act.pwm[2], 1000, 2000, 2000 ,1000);
+    act.pwm[SERVO1] = constrain(act.center[SERVO1] - pitch_pidsum, 1250, 1750); //take in account for the servo center (trim)
+    act.pwm[SERVO2] = constrain(act.center[SERVO2] + roll_pidsum, 1250, 1750); //take in account for the servo center (trim)
+    act.pwm[SERVO3] = mapFloat(act.pwm[2], 1000, 2000, 2000 ,1000);
    }
 
    void acro_mode(){
-     command.rate[PITCH] = mapFloat(command.input[PITCH], -1000, 1000, -100, 100);
-     command.rate[ROLL] = mapFloat(command.input[ROLL], -1000, 1000, -100, 100);
-     command.rate[PITCH] = (att.raw[PITCH] - att.rawp[PITCH] ) / time.cycleTime;
-     command.rate[ROLL] = (att.raw[ROLL] - att.rawp[ROLL] ) / time.cycleTime;
-
-     att.rawp[YAW] = att.raw[YAW];
-     att.rawp[PITCH] = att.raw[PITCH];
-     att.rawp[ROLL] = att.raw[ROLL];
+     // command.rate[PITCH] = mapFloat(command.input[PITCH], -1000, 1000, -100, 100);
+     // command.rate[ROLL] = mapFloat(command.input[ROLL], -1000, 1000, -100, 100);
+     // command.rate[PITCH] = (att.raw[PITCH] - att.rawp[PITCH] ) / time.cycleTime;
+     // command.rate[ROLL] = (att.raw[ROLL] - att.rawp[ROLL] ) / time.cycleTime;
+     //
+     // att.rawp[YAW] = att.raw[YAW];
+     // att.rawp[PITCH] = att.raw[PITCH];
+     // att.rawp[ROLL] = att.raw[ROLL];
    }

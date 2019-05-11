@@ -3,13 +3,26 @@
 
 #include <arduino.h>
 
-enum rc {
-  ROLL = 1,
+enum attitude {
+  YAW = 1,
   PITCH = 2,
-  YAW = 3,
-  MODE = 4,
-  THROTTLE = 5,
+  ROLL = 3,
+};
+
+enum rc {
+  THROTTLE = 1,
+  ELEVATOR = 2,
+  AILERON = 3,
+  RUDDER = 4,
+  MODE = 5,
   SWITCH = 6,
+};
+
+enum servo {
+  SERVO1 = 1,
+  SERVO2 = 2,
+  SERVO3 = 3,
+  SERVO4 = 4,
 };
 
 struct att_t{

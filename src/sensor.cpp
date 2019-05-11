@@ -174,7 +174,6 @@ void imu_loop() {
             att.raw[YAW] = ypr[0]*57.30; //yaw
             att.raw[PITCH] = ypr[2]*-57.30; //pitch
             att.raw[ROLL] = ypr[1]*57.30; //roll
-
             // display real acceleration, adjusted to remove gravity
             // mpu.dmpGetQuaternion(&q, fifoBuffer);
             // mpu.dmpGetAccel(&aa, fifoBuffer);

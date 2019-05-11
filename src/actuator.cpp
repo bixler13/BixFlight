@@ -24,9 +24,9 @@ void servo_loop(){
     for(int s = 1; s<=4; s++){
       act.pwms[s] = map(act.pwm[s],1000,2000,0,180);
     }
-    servo2.write(act.pwms[1]);
-    servo3.write(act.pwms[2]);
-    servo4.write(act.pwms[3]);
+    servo2.write(act.pwms[SERVO1]);
+    servo3.write(act.pwms[SERVO2]);
+    servo4.write(act.pwms[SERVO3]);
   #else
     for(int s = 1; s<=4; s++){
     act.pwms[s] = map(act.pwm[s],1000,2000,0,180);

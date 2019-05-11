@@ -13,6 +13,8 @@
 //#define OUTPUT_INPUT
 #define OUTPUT_OTHER
 
+//#define USE_RC
+
 int SDchip_pin = 10; //digitial pin for sd card logging purposes
 int thro_servo_pin = 11;
 int pitch_servo_pin = 8;
@@ -27,12 +29,12 @@ int pitch_pidsum, roll_pidsum;
 int pitch_command, roll_command;
 
 //Pitch Axis Params
-float p_pitch = 1; float P_pitch;
+float p_pitch = 2; float P_pitch;
 float i_pitch = 0; float I_pitch_old; float I_pitch_new;
 float d_pitch = 0; float D_pitch;
 
 //Roll Axis Params
-float p_roll = 1; float P_roll;
+float p_roll = 2; float P_roll;
 float i_roll = 0; float I_roll_old; float I_roll_new;
 float d_roll = 0; float D_roll;
 
@@ -40,8 +42,8 @@ float d_roll = 0; float D_roll;
 
 void setup() {
 
-  act.center[1] = 1500;
-  act.center[2] = 1500;
+  act.center[SERVO1] = 1500;
+  act.center[SERVO2] = 1500;
 //setup functions/////////////////////////////////////////////////////////////
   servo_setup();
   ppm_read_setup();
@@ -60,7 +62,15 @@ void loop() {
 //board loop sceduler///////////////////////////////////////////////////////////////////
 
   imu_loop(); //get imu data
-  ppm_read_loop(); //get rc data
+
+  #if defined(USE_RC)
+      ppm_read_loop(); //get rc data
+  #else
+  command.input[PITCH] = 1000;
+  command.input[ROLL] = 1500;
+  command.mode = 5;
+  #endif
+
   controller_loop();
   servo_loop(); //write to servos
   sdwrite_loop(); //write to sd card
@@ -84,9 +94,9 @@ void loop() {
 #ifdef OUTPUT_IMU
   Serial.print(att.raw[YAW]);
   Serial.print(" , ");
-  Serial.print(att.raw[PITCH]);
+  Serial.print(att.raw[ROLL]);
   Serial.print(" , ");
-  Serial.println(att.raw[ROLL]);
+  Serial.println(att.raw[PITCH]);
   //Serial.print(" , ");
   //Serial.print(time.cycleTime);
   //Serial.print(" , ");
@@ -94,19 +104,41 @@ void loop() {
 #endif
 
 #ifdef OUTPUT_SERVO
-  Serial.print(act.pwm[1]);
+  Serial.print(act.pwms[SERVO1]);
   Serial.print(" , ");
-  Serial.print(act.pwm[2]);
+  Serial.print(act.pwms[SERVO2]);
   Serial.print(" , ");
-  Serial.println(act.pwm[3]);
+  Serial.println(act.pwms[SERVO3]);
 #endif
 
 #ifdef OUTPUT_OTHER
-  Serial.print(act.pwm[1]);
+  Serial.print("PITCH");
+  Serial.print(" , ");
+  Serial.print(att.raw[PITCH]);
+  Serial.print(" , ");
+  Serial.print(command.angle[PITCH]);
   Serial.print(" , ");
   Serial.print(att.error[PITCH]);
   Serial.print(" , ");
-  Serial.println(I_pitch_old);
+  Serial.print(pitch_pidsum);
+  Serial.print(" , ");
+  Serial.print(act.pwm[PITCH]);
+  Serial.print(" , ");
+  Serial.print(act.pwms[PITCH]);
+  Serial.print(" , ");
+  Serial.print("ROLL");
+  Serial.print(" , ");
+  Serial.print(att.raw[ROLL]);
+  Serial.print(" , ");
+  Serial.print(command.angle[ROLL]);
+  Serial.print(" , ");
+  Serial.print(att.error[ROLL]);
+  Serial.print(" , ");
+  Serial.print(act.pwm[ROLL]);
+  Serial.print(" , ");
+  Serial.print(act.pwms[ROLL]);
+  Serial.print(" , ");
+  Serial.println(command.mode);
 #endif
 
 //end serial printing/////////////////////////////////////////////////////////
