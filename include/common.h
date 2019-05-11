@@ -4,12 +4,12 @@
 #include <arduino.h>
 
 enum rc {
-  ROLL,
-  PITCH,
-  YAW,
-  MODE,
-  THROTTLE,
-  SWITCH,
+  ROLL = 1,
+  PITCH = 2,
+  YAW = 3,
+  MODE = 4,
+  THROTTLE = 5,
+  SWITCH = 6,
 };
 
 struct att_t{
@@ -29,7 +29,8 @@ struct command_t{
 }; extern command_t command;
 
 struct act_t{
-  int pwm[4]; // servo pwm value (0-180) thro, elevator, ail1, ail2, rudder
+  int pwm[4]; // servo pwm value (1000-2000) thro, elevator, ail1, ail2, rudder
+  int pwms[4]; //servo pwm sent to arduino servo controller
   int center[4];
 }; extern act_t act;
 

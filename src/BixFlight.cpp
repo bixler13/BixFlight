@@ -11,7 +11,7 @@
 //#define OUTPUT_IMU
 //#define OUTPUT_SERVO
 //#define OUTPUT_INPUT
-//#define OUTPUT_OTHER
+#define OUTPUT_OTHER
 
 int SDchip_pin = 10; //digitial pin for sd card logging purposes
 int thro_servo_pin = 11;
@@ -23,16 +23,16 @@ unsigned long int a,b,c;
 int x[15],ch1[15],ch[7],i;
 //specifing arrays and variables to store values
 
-float pitch_pidsum, roll_pidsum;
-float pitch_command, roll_command;
+int pitch_pidsum, roll_pidsum;
+int pitch_command, roll_command;
 
 //Pitch Axis Params
-float p_pitch = .7; float P_pitch;
+float p_pitch = 1; float P_pitch;
 float i_pitch = 0; float I_pitch_old; float I_pitch_new;
 float d_pitch = 0; float D_pitch;
 
 //Roll Axis Params
-float p_roll = .7; float P_roll;
+float p_roll = 1; float P_roll;
 float i_roll = 0; float I_roll_old; float I_roll_new;
 float d_roll = 0; float D_roll;
 
@@ -40,8 +40,8 @@ float d_roll = 0; float D_roll;
 
 void setup() {
 
-  act.center[ROLL] = 90;
-  act.center[PITCH] = 90;
+  act.center[1] = 1500;
+  act.center[2] = 1500;
 //setup functions/////////////////////////////////////////////////////////////
   servo_setup();
   ppm_read_setup();
@@ -49,15 +49,14 @@ void setup() {
   sdwrite_setup();
 //end setup functions//////////////////////////////////////////////////////////
 
-  //#if defined(OUTPUT_IMU)  || defined(OUTPUT_INPUT) || defined(OUTPUT_SERVO) || defined(OUTPUT_OTHER)
+  #if defined(OUTPUT_IMU)  || defined(OUTPUT_INPUT) || defined(OUTPUT_SERVO) || defined(OUTPUT_OTHER)
     Serial.begin(115200);
-  //#endif
+  #endif
 
   delay(500); //delay to prepare for loop to bein
 }
 
 void loop() {
-
 //board loop sceduler///////////////////////////////////////////////////////////////////
 
   imu_loop(); //get imu data
@@ -87,11 +86,11 @@ void loop() {
   Serial.print(" , ");
   Serial.print(att.raw[PITCH]);
   Serial.print(" , ");
-  Serial.print(att.raw[ROLL]);
-  Serial.print(" , ");
-  Serial.print(time.cycleTime);
-  Serial.print(" , ");
-  Serial.println(time.totalTime);
+  Serial.println(att.raw[ROLL]);
+  //Serial.print(" , ");
+  //Serial.print(time.cycleTime);
+  //Serial.print(" , ");
+  //Serial.println(time.totalTime);
 #endif
 
 #ifdef OUTPUT_SERVO
@@ -105,17 +104,18 @@ void loop() {
 #ifdef OUTPUT_OTHER
   Serial.print(act.pwm[1]);
   Serial.print(" , ");
-  Serial.print(act.pwm[2]);
+  Serial.print(att.error[PITCH]);
   Serial.print(" , ");
-  Serial.println(command.mode);
+  Serial.println(I_pitch_old);
 #endif
+
 //end serial printing/////////////////////////////////////////////////////////
 
-if (Serial.available() > 0) {
-        // read the incoming byte:
-        p_pitch = Serial.parseInt();
-        Serial.println(p_pitch);
-      }
+// if (Serial.available() > 0) {
+//         // read the incoming byte:
+//         p_pitch = Serial.parseInt();
+//         Serial.println(p_pitch);
+//       }
 
   while(1) {
     time.currentTime = micros();

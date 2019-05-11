@@ -32,7 +32,7 @@ void ppm_read_loop(){
 
    for(i=1;i<=6;i++){
      ch[i]=(ch1[i+j]-1000); //assign 6 channel values after separation space
-       ch[i]=map(ch[i], 0, 1000, -1000, 1000);
+       ch[i]=map(ch[i], 0, 1000, 1000, 2000);
        }
 
    command.input[THROTTLE] = ch[3];
@@ -42,15 +42,15 @@ void ppm_read_loop(){
    command.input[YAW]     = ch[4];
    command.input[SWITCH]   = ch[5];
 
-    if (command.input[MODE] > 1000 || command.input[MODE] < -1000){
+    if (command.input[MODE] > 2000 || command.input[MODE] < 1000){
       command.input[MODE] = command.inputp[MODE];
     }
 
-    if (command.input[MODE] > 200){
+    if (command.input[MODE] > 1600){
       command.mode = 1;
     }
 
-    else if (command.input[MODE] < -200){
+    else if (command.input[MODE] < 1400){
       command.mode = 3;
     }
 
@@ -59,7 +59,7 @@ void ppm_read_loop(){
     }
     command.inputp[MODE] = command.input[MODE];
 
-  if (command.input[SWITCH] >= 0){
+  if (command.input[SWITCH] >= 1500){
     command.swtch = 1;
   }
 

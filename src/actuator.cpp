@@ -3,7 +3,7 @@
 #include "BixFlight.h"
 #include "common.h"
 
-#define USE_SERVO
+//#define USE_SERVO
 
 Servo servo1;
 Servo servo2;
@@ -21,10 +21,16 @@ void servo_setup(){
 void servo_loop(){
 
   #if(defined(USE_SERVO))
-    servo2.write(act.pwm[1]);
-    servo3.write(act.pwm[2]);
-    servo4.write(act.pwm[3]);
+    for(int s = 1; s<=4; s++){
+      act.pwms[s] = map(act.pwm[s],1000,2000,0,180);
+    }
+    servo2.write(act.pwms[1]);
+    servo3.write(act.pwms[2]);
+    servo4.write(act.pwms[3]);
   #else
+    for(int s = 1; s<=4; s++){
+    act.pwms[s] = map(act.pwm[s],1000,2000,0,180);
+    }
     servo1.write(0); //throttle
     servo2.write(90);
     servo3.write(90);

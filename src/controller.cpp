@@ -20,16 +20,16 @@ void controller_loop(){
 
 void manual_mode(){
  //manual mode
-    act.pwm[1] = mapFloat(command.input[PITCH], -1000, 1000, 50, 130);
-    act.pwm[2] = mapFloat(command.input[ROLL], -1000, 1000, 130 ,50);
-    act.pwm[3] = mapFloat(command.input[ROLL], -1000, 1000, 130 ,50);
+    act.pwm[1] = mapFloat(command.input[PITCH], 1000, 2000, 1250, 1750);
+    act.pwm[2] = mapFloat(command.input[ROLL], 1000, 2000, 1250 ,1750);
+    act.pwm[3] = mapFloat(command.input[ROLL], 1000, 2000, 1250 ,1750);
 }
 
 void horizon_mode(){
     //first we need to calculate error
-    command.angle[PITCH] = mapFloat(command.input[PITCH],-1000,1000,-45,45);
-    command.angle[ROLL] = mapFloat(command.input[ROLL], -1000, 1000, -30,30);
-    att.error[PITCH] = command.angle[PITCH]-att.raw[PITCH];
+    command.angle[PITCH] = mapFloat(command.input[PITCH],1000,2000,-45,45);
+    command.angle[ROLL] = mapFloat(command.input[ROLL],1000, 2000, -30,30);
+    att.error[PITCH] = -1 * command.angle[PITCH]-att.raw[PITCH];
     att.error[ROLL] = command.angle[ROLL]-att.raw[ROLL];
 
     //Calculate the Kp porition
@@ -37,7 +37,7 @@ void horizon_mode(){
     P_roll = p_roll * att.error[ROLL];
 
     //Calculate the Ki portion
-      I_pitch_old = ((att.error[PITCH] * time.cycleTime)+I_pitch_old);
+      I_pitch_old = (((att.error[PITCH] * time.cycleTime)/100000)+I_pitch_old);
       I_pitch_new = I_pitch_old *i_pitch;
 
       I_roll_old = ((att.error[ROLL] * time.cycleTime)+I_roll_old);
@@ -51,10 +51,11 @@ void horizon_mode(){
 
     pitch_pidsum = (P_pitch + I_pitch_new + D_pitch); //sum the contributions
     roll_pidsum = (P_roll + I_roll_new + D_roll); //sum the contributions
-    act.pwm[1] = constrain(act.center[PITCH] - pitch_pidsum, 30, 150); //take in account for the servo center (trim)
-    act.pwm[2] = constrain(act.center[ROLL] + roll_pidsum, 30, 150); //take in account for the servo center (trim)
-    act.pwm[3] = mapFloat(act.pwm[2], 0, 180, 180 ,0);
-    act.pwm[2] = mapFloat(act.pwm[2], 0, 180, 180 ,0);
+    act.pwm[1] = constrain(act.center[1] - pitch_pidsum, 1250, 1750); //take in account for the servo center (trim)
+    act.pwm[2] = constrain(act.center[2] + roll_pidsum, 1250, 1750); //take in account for the servo center (trim)
+    act.pwm[2] = act.center[ROLL] + roll_pidsum;
+    act.pwm[3] = mapFloat(act.pwm[2], 1000, 2000, 2000 ,1000);
+    act.pwm[2] = mapFloat(act.pwm[2], 1000, 2000, 2000 ,1000);
    }
 
    void acro_mode(){
