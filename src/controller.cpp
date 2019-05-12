@@ -37,23 +37,23 @@ void horizon_mode(){
     P_roll = p_roll * att.error[ROLL];
 
     //Calculate the Ki portion
-      I_pitch_old = (((att.error[PITCH] * time.cycleTime)/100000)+I_pitch_old);
+      I_pitch_old = (((att.error[PITCH] * timed.cycleTime)/100000)+I_pitch_old);
       I_pitch_new = I_pitch_old *i_pitch;
 
-      I_roll_old = ((att.error[ROLL] * time.cycleTime)+I_roll_old);
+      I_roll_old = ((att.error[ROLL] * timed.cycleTime)+I_roll_old);
       I_roll_new = I_roll_old *i_roll;
 
     //Calculate the Kd portion
-    D_pitch = ((att.error[PITCH] - att.errorp[PITCH])/time.cycleTime)*d_pitch;
-    D_roll = ((att.error[ROLL] - att.errorp[ROLL])/time.cycleTime)*d_roll;
+    D_pitch = ((att.error[PITCH] - att.errorp[PITCH])/timed.cycleTime)*d_pitch;
+    D_roll = ((att.error[ROLL] - att.errorp[ROLL])/timed.cycleTime)*d_roll;
     att.errorp[PITCH] = att.error[PITCH];
     att.errorp[ROLL] = att.error[ROLL];
 
     pitch_pidsum = (P_pitch + I_pitch_new + D_pitch); //sum the contributions
     roll_pidsum = (P_roll + I_roll_new + D_roll); //sum the contributions
     act.pwm[SERVO1] = constrain(act.center[SERVO1] - pitch_pidsum, 1250, 1750); //take in account for the servo center (trim)
-    act.pwm[SERVO2] = constrain(act.center[SERVO2] - roll_pidsum, 1250, 1750); //take in account for the servo center (trim)
-    act.pwm[SERVO3] = constrain(act.center[SERVO3] - roll_pidsum, 1250, 1750); //take in account for the servo center (trim)
+    act.pwm[SERVO2] = constrain(act.center[SERVO2] + roll_pidsum, 1250, 1750); //take in account for the servo center (trim)
+    act.pwm[SERVO3] = constrain(act.center[SERVO3] + roll_pidsum, 1250, 1750); //take in account for the servo center (trim)
    }
 
    void acro_mode(){

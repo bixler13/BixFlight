@@ -29,7 +29,7 @@
     void sdwrite_loop(){
 
         char dataString[20];
-        int time_write = time.totalTime/1000;
+        int time_write = timed.totalTime/1000;
         int roll_write = att.raw[ROLL];
         int pitch_write = att.raw[PITCH];
         int rollin_write = command.input[ROLL];

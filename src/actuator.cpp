@@ -1,14 +1,14 @@
-#include <Servo.h>
+#include "PWMServo.h"
 #include "actuator.h"
 #include "BixFlight.h"
 #include "common.h"
 
 #define USE_SERVO
 
-Servo servo1;
-Servo servo2;
-Servo servo3;
-Servo servo4;
+PWMServo servo1;
+PWMServo servo2;
+PWMServo servo3;
+PWMServo servo4;
 
 
 void servo_setup(){
@@ -24,6 +24,7 @@ void servo_loop(){
     for(int s = 1; s<=4; s++){
       act.pwms[s] = map(act.pwm[s],1000,2000,0,180);
     }
+    servo1.write(0); //throttle0
     servo2.write(act.pwms[SERVO1]);
     servo3.write(act.pwms[SERVO2]);
     servo4.write(act.pwms[SERVO3]);
