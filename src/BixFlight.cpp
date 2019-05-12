@@ -29,12 +29,12 @@ int pitch_pidsum, roll_pidsum;
 int pitch_command, roll_command;
 
 //Pitch Axis Params
-float p_pitch = 2; float P_pitch;
+float p_pitch = 5; float P_pitch;
 float i_pitch = 0; float I_pitch_old; float I_pitch_new;
 float d_pitch = 0; float D_pitch;
 
 //Roll Axis Params
-float p_roll = 2; float P_roll;
+float p_roll = 5; float P_roll;
 float i_roll = 0; float I_roll_old; float I_roll_new;
 float d_roll = 0; float D_roll;
 
@@ -44,6 +44,7 @@ void setup() {
 
   act.center[SERVO1] = 1500;
   act.center[SERVO2] = 1500;
+  act.center[SERVO3] = 1500;
 //setup functions/////////////////////////////////////////////////////////////
   servo_setup();
   ppm_read_setup();
@@ -66,7 +67,7 @@ void loop() {
   #if defined(USE_RC)
       ppm_read_loop(); //get rc data
   #else
-  command.input[PITCH] = 1000;
+  command.input[PITCH] = 1500;
   command.input[ROLL] = 1500;
   command.mode = 5;
   #endif
@@ -122,9 +123,9 @@ void loop() {
   Serial.print(" , ");
   Serial.print(pitch_pidsum);
   Serial.print(" , ");
-  Serial.print(act.pwm[PITCH]);
+  Serial.print(act.pwm[SERVO1]);
   Serial.print(" , ");
-  Serial.print(act.pwms[PITCH]);
+  Serial.print(act.pwms[SERVO1]);
   Serial.print(" , ");
   Serial.print("ROLL");
   Serial.print(" , ");
@@ -134,9 +135,9 @@ void loop() {
   Serial.print(" , ");
   Serial.print(att.error[ROLL]);
   Serial.print(" , ");
-  Serial.print(act.pwm[ROLL]);
+  Serial.print(act.pwm[SERVO2]);
   Serial.print(" , ");
-  Serial.print(act.pwms[ROLL]);
+  Serial.print(act.pwms[SERVO2]);
   Serial.print(" , ");
   Serial.println(command.mode);
 #endif

@@ -29,7 +29,7 @@ void horizon_mode(){
     //first we need to calculate error
     command.angle[PITCH] = mapFloat(command.input[PITCH],1000,2000,-45,45);
     command.angle[ROLL] = mapFloat(command.input[ROLL],1000, 2000, -30,30);
-    att.error[PITCH] = -1 * command.angle[PITCH]-att.raw[PITCH];
+    att.error[PITCH] = command.angle[PITCH]-att.raw[PITCH];
     att.error[ROLL] = command.angle[ROLL]-att.raw[ROLL];
 
     //Calculate the Kp porition
@@ -52,8 +52,8 @@ void horizon_mode(){
     pitch_pidsum = (P_pitch + I_pitch_new + D_pitch); //sum the contributions
     roll_pidsum = (P_roll + I_roll_new + D_roll); //sum the contributions
     act.pwm[SERVO1] = constrain(act.center[SERVO1] - pitch_pidsum, 1250, 1750); //take in account for the servo center (trim)
-    act.pwm[SERVO2] = constrain(act.center[SERVO2] + roll_pidsum, 1250, 1750); //take in account for the servo center (trim)
-    act.pwm[SERVO3] = mapFloat(act.pwm[2], 1000, 2000, 2000 ,1000);
+    act.pwm[SERVO2] = constrain(act.center[SERVO2] - roll_pidsum, 1250, 1750); //take in account for the servo center (trim)
+    act.pwm[SERVO3] = constrain(act.center[SERVO3] - roll_pidsum, 1250, 1750); //take in account for the servo center (trim)
    }
 
    void acro_mode(){

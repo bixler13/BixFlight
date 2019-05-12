@@ -3,7 +3,7 @@
 #include "BixFlight.h"
 #include "common.h"
 
-//#define USE_SERVO
+#define USE_SERVO
 
 Servo servo1;
 Servo servo2;
