@@ -2,63 +2,67 @@
 #include <arduino.h>
 #include "controller.h"
 #include "function.h"
+#include "common.h"
+
+void controller_loop(){
+  //mode determination/////////////////////////////////////////////////////////
+    if (command.mode == 3){
+      manual_mode();
+    }
+    else if (command.mode ==2){
+      acro_mode();
+    }
+    else{
+      horizon_mode();
+    }
+  //end mode determineation////////////////////////////////////////////////////////
+}
 
 void manual_mode(){
  //manual mode
-    pitch_servo_angle = mapFloat(pitch_input, -1000, 1000, 50, 130);
-    roll_servo2_angle = mapFloat(roll_input, -1000, 1000, 130 ,50);
-    roll_servo_angle = mapFloat(roll_input, -1000, 1000, 130 ,50);
+    act.pwm[SERVO1] = mapFloat(command.input[PITCH], 1000, 2000, 1250, 1750);
+    act.pwm[SERVO2] = mapFloat(command.input[ROLL], 1000, 2000, 1250 ,1750);
+    act.pwm[SERVO3] = mapFloat(command.input[ROLL], 1000, 2000, 1250 ,1750);
 }
 
-  void horizon_mode(){
-//////////////////////////Pitch Axis/////////////////////////////
+void horizon_mode(){
     //first we need to calculate error
-    pitch_command = mapFloat(pitch_input,-1000,1000,-45,45);
-    roll_command = mapFloat(roll_input, -1000, 1000, -30,30);
-    pitch_error = pitch_command-pitch;
-    roll_error = roll_command-roll;
+    command.angle[PITCH] = mapFloat(command.input[PITCH],1000,2000,-45,45);
+    command.angle[ROLL] = mapFloat(command.input[ROLL],1000, 2000, -30,30);
+    att.error[PITCH] = command.angle[PITCH]-att.raw[PITCH];
+    att.error[ROLL] = command.angle[ROLL]-att.raw[ROLL];
 
     //Calculate the Kp porition
-    P_pitch = p_pitch * pitch_error;
-    P_roll = p_roll * roll_error;
+    P_pitch = p_pitch * att.error[PITCH];
+    P_roll = p_roll * att.error[ROLL];
 
     //Calculate the Ki portion
-      if(throttle_input >= -500){
-      I_pitch_old = ((pitch_error * dt)+I_pitch_old);
+      I_pitch_old = (((att.error[PITCH] * time.cycleTime)/100000)+I_pitch_old);
       I_pitch_new = I_pitch_old *i_pitch;
 
-      I_roll_old = ((roll_error * dt)+I_roll_old);
+      I_roll_old = ((att.error[ROLL] * time.cycleTime)+I_roll_old);
       I_roll_new = I_roll_old *i_roll;
-      }
-
-      else{
-        I_pitch_old = 0;
-        I_pitch_new = 0;
-        I_pitch_old = 0;
-        I_pitch_new = 0;
-      }
 
     //Calculate the Kd portion
-    D_pitch = ((pitch_error - pitch_error_old)/dt)*d_pitch;
-    D_roll = ((roll_error - roll_error_old)/dt)*d_roll;
-    pitch_error_old = pitch_error;
-    roll_error_old = roll_error;
+    D_pitch = ((att.error[PITCH] - att.errorp[PITCH])/time.cycleTime)*d_pitch;
+    D_roll = ((att.error[ROLL] - att.errorp[ROLL])/time.cycleTime)*d_roll;
+    att.errorp[PITCH] = att.error[PITCH];
+    att.errorp[ROLL] = att.error[ROLL];
 
     pitch_pidsum = (P_pitch + I_pitch_new + D_pitch); //sum the contributions
     roll_pidsum = (P_roll + I_roll_new + D_roll); //sum the contributions
-    pitch_servo_angle = constrain(pitch_servo_center + pitch_pidsum, 30, 150); //take in account for the servo center (trim)
-    roll_servo_angle = constrain(roll_servo_center + roll_pidsum, 30, 150); //take in account for the servo center (trim)
-    roll_servo2_angle = mapFloat(roll_servo_angle, 0, 180, 180 ,0);
-    roll_servo_angle = mapFloat(roll_servo_angle, 0, 180, 180 ,0);
+    act.pwm[SERVO1] = constrain(act.center[SERVO1] - pitch_pidsum, 1250, 1750); //take in account for the servo center (trim)
+    act.pwm[SERVO2] = constrain(act.center[SERVO2] - roll_pidsum, 1250, 1750); //take in account for the servo center (trim)
+    act.pwm[SERVO3] = constrain(act.center[SERVO3] - roll_pidsum, 1250, 1750); //take in account for the servo center (trim)
    }
 
    void acro_mode(){
-     pitch_rate_command = mapFloat(pitch_input, -1000, 1000, -100, 100);
-     roll_rate_command = mapFloat(roll_input, -1000, 1000, -100, 100);
-     pitch_rate = (pitch - pitch_old) / dt;
-     roll_rate = (roll - roll_old) / dt;
-
-
-     pitch = pitch_old;
-     roll = roll_old;
+     // command.rate[PITCH] = mapFloat(command.input[PITCH], -1000, 1000, -100, 100);
+     // command.rate[ROLL] = mapFloat(command.input[ROLL], -1000, 1000, -100, 100);
+     // command.rate[PITCH] = (att.raw[PITCH] - att.rawp[PITCH] ) / time.cycleTime;
+     // command.rate[ROLL] = (att.raw[ROLL] - att.rawp[ROLL] ) / time.cycleTime;
+     //
+     // att.rawp[YAW] = att.raw[YAW];
+     // att.rawp[PITCH] = att.raw[PITCH];
+     // att.rawp[ROLL] = att.raw[ROLL];
    }
