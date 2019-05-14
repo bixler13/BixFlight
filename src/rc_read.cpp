@@ -4,8 +4,8 @@
 #include "common.h"
 
 void ppm_read_setup(){
-  pinMode(23, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(23), rc_read_ppm2, FALLING);
+  pinMode(20, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(20), rc_read_ppm2, FALLING);
  }
 
 void rc_read_ppm2(){

@@ -11,9 +11,9 @@
 #include "Adafruit_GFX.h"
 #include "Adafruit_SSD1306.h"
 
-#define OUTPUT_IMU
+//#define OUTPUT_IMU
 //#define OUTPUT_SERVO
-//#define OUTPUT_INPUT
+#define OUTPUT_INPUT
 //#define OUTPUT_OTHER
 
 //#define USE_RC
@@ -50,7 +50,7 @@ void setup() {
   act.center[SERVO3] = 1500;
 //setup functions/////////////////////////////////////////////////////////////
   servo_setup();
-  //ppm_read_setup();
+  ppm_read_setup();
   imu_setup();
   //sdwrite_setup();
   //display_setup();
@@ -69,7 +69,7 @@ void loop() {
   imu_loop(); //get imu data
 
   #if defined(USE_RC)
-      //ppm_read_loop(); //get rc data
+      ppm_read_loop(); //get rc data
   #else
   command.input[PITCH] = 1500;
   command.input[ROLL] = 1500;
