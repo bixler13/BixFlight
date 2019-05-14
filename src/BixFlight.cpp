@@ -1,5 +1,5 @@
 #include <arduino.h>
-#include <Servo.h>
+#include <PWMServo.h>
 #include "sensor.h"
 #include "BixFlight.h"
 #include "actuator.h"
@@ -7,19 +7,22 @@
 #include "rc_read.h"
 #include "sdwrite.h"
 #include "common.h"
+#include "display.h"
+#include "Adafruit_GFX.h"
+#include "Adafruit_SSD1306.h"
 
 //#define OUTPUT_IMU
 //#define OUTPUT_SERVO
-//#define OUTPUT_INPUT
-#define OUTPUT_OTHER
+#define OUTPUT_INPUT
+//#define OUTPUT_OTHER
 
 //#define USE_RC
 
-int SDchip_pin = 10; //digitial pin for sd card logging purposes
-int thro_servo_pin = 11;
-int pitch_servo_pin = 8;
-int roll_servo1_pin = 9;
-int roll_servo2_pin = 7;
+int SDchip_pin = 22; //digitial pin for sd card logging purposes
+int thro_servo_pin = 10;
+int pitch_servo_pin = 9;
+int roll_servo1_pin = 6;
+int roll_servo2_pin = 5;
 
 unsigned long int a,b,c;
 int x[15],ch1[15],ch[7],i;
@@ -49,11 +52,12 @@ void setup() {
   servo_setup();
   ppm_read_setup();
   imu_setup();
-  sdwrite_setup();
+  //sdwrite_setup();
+  //display_setup();
 //end setup functions//////////////////////////////////////////////////////////
 
   #if defined(OUTPUT_IMU)  || defined(OUTPUT_INPUT) || defined(OUTPUT_SERVO) || defined(OUTPUT_OTHER)
-    Serial.begin(115200);
+    Serial.begin(9600);
   #endif
 
   delay(500); //delay to prepare for loop to bein
@@ -74,7 +78,8 @@ void loop() {
 
   controller_loop();
   servo_loop(); //write to servos
-  sdwrite_loop(); //write to sd card
+  //sdwrite_loop(); //write to sd card
+  //display_show();
 
 //end board loop//////////////////////////////////////////////////////////////
 
@@ -89,19 +94,20 @@ void loop() {
   Serial.print(" , ");
   Serial.print(command.input[YAW]);
   Serial.print(" , ");
-  Serial.println(command.input[MODE]);
+  Serial.println(command.mode);
 #endif
 
 #ifdef OUTPUT_IMU
+  Serial.print("Yaw ");
   Serial.print(att.raw[YAW]);
   Serial.print(" , ");
   Serial.print(att.raw[ROLL]);
   Serial.print(" , ");
   Serial.println(att.raw[PITCH]);
-  //Serial.print(" , ");
-  //Serial.print(time.cycleTime);
-  //Serial.print(" , ");
-  //Serial.println(time.totalTime);
+  // Serial.print(" , ");
+  // Serial.print(timed.cycleTime);
+  // Serial.print(" , ");
+  // Serial.println(timed.totalTime);
 #endif
 
 #ifdef OUTPUT_SERVO
@@ -151,15 +157,15 @@ void loop() {
 //       }
 
   while(1) {
-    time.currentTime = micros();
-    time.cycleTime = time.currentTime - time.previousTime;
+    timed.currentTime = micros();
+    timed.cycleTime = timed.currentTime - timed.previousTime;
     #if defined(LOOP_TIME)
-      if (time.cycleTime >= LOOP_TIME) break;
+      if (timed.cycleTime >= LOOP_TIME) break;
     #else
       break;
     #endif
       }
-  time.previousTime = time.currentTime;
-  time.totalTime = time.totalTime + time.cycleTime;
+  timed.previousTime = timed.currentTime;
+  timed.totalTime = timed.totalTime + timed.cycleTime;
 
 }
