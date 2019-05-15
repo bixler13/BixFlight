@@ -27,25 +27,22 @@ void display_show(){
   display.setTextSize(1);
   display.setTextColor(WHITE);
   display.setCursor(0,0);
-  display.println(F("   Bix Simulator"));
+  display.println(F("   BixFlight"));
 
   display.setCursor(0,16);
-  display.print("Sabertooth   =      F");
-  display.setCursor(100,16);
-  display.print("test");
+  display.print("ROLL ");
+  display.setCursor(50,16);
+  display.print(att.raw[ROLL]);
 
   display.setCursor(0,24);
-  display.print("Diode        =      F");
-  display.setCursor(100,24);
-  display.print("test");
+  display.print("PITCH ");
+  display.setCursor(50,24);
+  display.print(att.raw[PITCH]);
 
   display.setCursor(0,32);
-  display.print("Power Supply =      F");
-  display.setCursor(100,32);
-  display.print("test");
-
-  display.setCursor(0,55);
-  display.print("LED Mode = Blue");
+  display.print("YAW ");
+  display.setCursor(50,32);
+  display.print(att.raw[YAW]);
 
   display.display();
 

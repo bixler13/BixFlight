@@ -131,6 +131,7 @@ void imu_loop() {
         // reset so we can continue cleanly
         mpu.resetFIFO();
         fifoCount = mpu.getFIFOCount();
+        Serial.println("FIFO overflow");
 
     // otherwise, check for DMP data ready interrupt (this should happen frequently)
     } else if (mpuIntStatus & _BV(MPU6050_INTERRUPT_DMP_INT_BIT)) {

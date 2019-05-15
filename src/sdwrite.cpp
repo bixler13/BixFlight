@@ -7,6 +7,7 @@
     SdFile csvFile;
     int counter = 0;
     char filename[20];
+    char datalist[20];
 
     void sdwrite_setup(){
       randomSeed(analogRead(0));
@@ -14,7 +15,6 @@
       sprintf(filename, "data_%d.csv",num);
       sd.begin(4, SPI_FULL_SPEED); //SD_SCK_MHZ(50)
       csvFile.open(filename, O_CREAT | O_APPEND | O_WRITE);
-      char datalist[20];
       sprintf(datalist, "time (ms), roll (deg),pitch (deg),pitch_in (pwm),roll_in (pwm), pitch_servo, roll_servo, roll2_servo\n");
       csvFile.write(datalist);
       csvFile.flush();
