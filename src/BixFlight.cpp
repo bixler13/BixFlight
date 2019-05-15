@@ -11,9 +11,9 @@
 #include "Adafruit_GFX.h"
 #include "Adafruit_SSD1306.h"
 
-//#define OUTPUT_IMU
+#define OUTPUT_IMU
 //#define OUTPUT_SERVO
-#define OUTPUT_INPUT
+//#define OUTPUT_INPUT
 //#define OUTPUT_OTHER
 
 //#define USE_RC
@@ -52,7 +52,7 @@ void setup() {
   servo_setup();
   ppm_read_setup();
   imu_setup();
-  //sdwrite_setup();
+  sdwrite_setup();
   //display_setup();
 //end setup functions//////////////////////////////////////////////////////////
 
