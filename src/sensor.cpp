@@ -3,6 +3,7 @@
 #include "I2Cdev.h"
 #include "MPU6050_6Axis_MotionApps20.h"
 #include "common.h"
+#include "display.h"
 //#include "MPU6050.h" // not necessary if using MotionApps include file
 
 
@@ -98,6 +99,7 @@ void imu_setup() {
 // ================================================================
 
 void imu_loop() {
+  mpu.resetFIFO(); //added this
     // if programming failed, don't try to do anything
     if (!dmpReady) return;
 
@@ -109,7 +111,7 @@ void imu_loop() {
         }
         // other program behavior stuff here
         // .
-        // .
+        //
         // .
         // if you are really paranoid you can frequently test in between other
         // stuff to see if mpuInterrupt is true, and if so, "break;" from the
@@ -140,6 +142,7 @@ void imu_loop() {
 
         // read a packet from FIFO
         mpu.getFIFOBytes(fifoBuffer, packetSize);
+        mpu.resetFIFO(); //added this
 
         // track FIFO count here in case there is > 1 packet available
         // (this lets us immediately read more without waiting for an interrupt)

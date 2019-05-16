@@ -17,8 +17,6 @@
 //#define OUTPUT_OTHER
 
 //#define USE_RC
-
-int SDchip_pin = 22; //digitial pin for sd card logging purposes
 int thro_servo_pin = 10;
 int pitch_servo_pin = 9;
 int roll_servo1_pin = 6;
@@ -53,11 +51,11 @@ void setup() {
   ppm_read_setup();
   imu_setup();
   sdwrite_setup();
-  //display_setup();
+  display_setup();
 //end setup functions//////////////////////////////////////////////////////////
 
   #if defined(OUTPUT_IMU)  || defined(OUTPUT_INPUT) || defined(OUTPUT_SERVO) || defined(OUTPUT_OTHER)
-    Serial.begin(9600);
+    Serial.begin(115200);
   #endif
 
   delay(500); //delay to prepare for loop to bein
@@ -78,8 +76,9 @@ void loop() {
 
   controller_loop();
   servo_loop(); //write to servos
-  //sdwrite_loop(); //write to sd card
-  //display_show();
+  sdwrite_loop(); //write to sd card
+  display_show();
+
 
 //end board loop//////////////////////////////////////////////////////////////
 
@@ -150,11 +149,6 @@ void loop() {
 
 //end serial printing/////////////////////////////////////////////////////////
 
-// if (Serial.available() > 0) {
-//         // read the incoming byte:
-//         p_pitch = Serial.parseInt();
-//         Serial.println(p_pitch);
-//       }
 
   while(1) {
     timed.currentTime = micros();
