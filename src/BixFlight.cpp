@@ -12,9 +12,9 @@
 #include "Adafruit_SSD1306.h"
 #include "button.h"
 
-#define OUTPUT_IMU
+//#define OUTPUT_IMU
 //#define OUTPUT_SERVO
-//#define OUTPUT_INPUT
+#define OUTPUT_INPUT
 //#define OUTPUT_OTHER
 
 //#define USE_RC
@@ -81,7 +81,7 @@ void loop() {
   servo_loop(); //write to servos
   sdwrite_loop(); //write to sd card
   button_read();
-  //display_show();
+  display_show();
 
 
 //end board loop//////////////////////////////////////////////////////////////
@@ -97,7 +97,9 @@ void loop() {
   Serial.print(" , ");
   Serial.print(command.input[YAW]);
   Serial.print(" , ");
-  Serial.println(command.mode);
+  Serial.print(command.mode);
+  Serial.print(" , ");
+  Serial.println(button.adc);
 #endif
 
 #ifdef OUTPUT_IMU
