@@ -18,7 +18,7 @@ void display_setup(){
 
   display.clearDisplay();
   display.display();
-  delay(1000);
+  delay(100);
 }
 
 void display_show(){
