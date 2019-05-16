@@ -52,11 +52,21 @@ struct timet{
   uint16_t previousTime = 0;
   uint16_t cycleTime = 0; // this is the number in micro second to achieve a full loop, it can differ a little and is taken into account in the PID loop
   uint32_t totalTime = 0;
+  uint16_t hz = 0;
 }; extern timet timed;
 
 struct pidt{
   int pitch[3]; //pid value for pitch axis P, I,D
   int roll[3]; //pid value for roll axis P,I,D
 }; extern pidt pid;
+
+struct buttont{
+  int adc = 0;
+  bool one = false;
+  bool two = false;
+  bool three = false;
+  bool four = false;
+  bool five = false;
+}; extern buttont button;
 
 #endif

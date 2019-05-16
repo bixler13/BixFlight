@@ -10,6 +10,7 @@
 #include "display.h"
 #include "Adafruit_GFX.h"
 #include "Adafruit_SSD1306.h"
+#include "button.h"
 
 #define OUTPUT_IMU
 //#define OUTPUT_SERVO
@@ -58,6 +59,8 @@ void setup() {
     Serial.begin(115200);
   #endif
 
+
+
   delay(500); //delay to prepare for loop to bein
 }
 
@@ -77,7 +80,8 @@ void loop() {
   controller_loop();
   servo_loop(); //write to servos
   sdwrite_loop(); //write to sd card
-  display_show();
+  button_read();
+  //display_show();
 
 
 //end board loop//////////////////////////////////////////////////////////////
@@ -102,11 +106,11 @@ void loop() {
   Serial.print(" , ");
   Serial.print(att.raw[ROLL]);
   Serial.print(" , ");
-  Serial.println(att.raw[PITCH]);
-  // Serial.print(" , ");
-  // Serial.print(timed.cycleTime);
-  // Serial.print(" , ");
-  // Serial.println(timed.totalTime);
+  Serial.print(att.raw[PITCH]);
+  Serial.print(" , ");
+  Serial.print(timed.cycleTime);
+  Serial.print(" , ");
+  Serial.println(timed.totalTime);
 #endif
 
 #ifdef OUTPUT_SERVO
@@ -153,6 +157,7 @@ void loop() {
   while(1) {
     timed.currentTime = micros();
     timed.cycleTime = timed.currentTime - timed.previousTime;
+    timed.hz = 1 * (1000000 / timed.cycleTime);
     #if defined(LOOP_TIME)
       if (timed.cycleTime >= LOOP_TIME) break;
     #else

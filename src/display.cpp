@@ -44,6 +44,11 @@ void display_show(){
   display.setCursor(50,32);
   display.print(att.raw[YAW]);
 
+  display.setCursor(0,40);
+  display.print("hz ");
+  display.setCursor(50,40);
+  display.print(timed.hz);
+
   display.display();
 
 }
