@@ -20,15 +20,15 @@ void controller_loop(){
 
 void manual_mode(){
  //manual mode
-    act.pwm[SERVO1] = mapFloat(command.input[PITCH], 1000, 2000, 1250, 1750);
-    act.pwm[SERVO2] = mapFloat(command.input[ROLL], 1000, 2000, 1250 ,1750);
-    act.pwm[SERVO3] = mapFloat(command.input[ROLL], 1000, 2000, 1250 ,1750);
+    act.pwm[SERVO1] = mapFloat(command.input[PITCH], 1000, 2000, 200, -200) + act.center[SERVO1];
+    act.pwm[SERVO2] = mapFloat(command.input[ROLL], 1000, 2000, 290 ,-290) + act.center[SERVO2];
+    act.pwm[SERVO3] = mapFloat(command.input[ROLL], 1000, 2000, 290 ,-290) + act.center[SERVO3];
 }
 
 void horizon_mode(){
     //first we need to calculate error
     command.angle[PITCH] = mapFloat(command.input[PITCH],1000,2000,-45,45);
-    command.angle[ROLL] = mapFloat(command.input[ROLL],1000, 2000, -30,30);
+    command.angle[ROLL] = mapFloat(command.input[ROLL],1000, 2000, -45,45);
     att.error[PITCH] = command.angle[PITCH]-att.raw[PITCH];
     att.error[ROLL] = command.angle[ROLL]-att.raw[ROLL];
 
@@ -40,7 +40,7 @@ void horizon_mode(){
       I_pitch_old = (((att.error[PITCH] * timed.cycleTime)/100000)+I_pitch_old);
       I_pitch_new = I_pitch_old *i_pitch;
 
-      I_roll_old = ((att.error[ROLL] * timed.cycleTime)+I_roll_old);
+      I_roll_old = ((att.error[ROLL] * timed.cycleTime/100000)+I_roll_old);
       I_roll_new = I_roll_old *i_roll;
 
     //Calculate the Kd portion
@@ -52,8 +52,8 @@ void horizon_mode(){
     pitch_pidsum = (P_pitch + I_pitch_new + D_pitch); //sum the contributions
     roll_pidsum = (P_roll + I_roll_new + D_roll); //sum the contributions
     act.pwm[SERVO1] = constrain(act.center[SERVO1] - pitch_pidsum, 1250, 1750); //take in account for the servo center (trim)
-    act.pwm[SERVO2] = constrain(act.center[SERVO2] + roll_pidsum, 1250, 1750); //take in account for the servo center (trim)
-    act.pwm[SERVO3] = constrain(act.center[SERVO3] + roll_pidsum, 1250, 1750); //take in account for the servo center (trim)
+    act.pwm[SERVO2] = constrain(act.center[SERVO2] - roll_pidsum, 1250, 1750); //take in account for the servo center (trim)
+    act.pwm[SERVO3] = constrain(act.center[SERVO3] - roll_pidsum, 1250, 1750); //take in account for the servo center (trim)
    }
 
    void acro_mode(){
