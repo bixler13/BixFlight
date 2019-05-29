@@ -10,6 +10,7 @@
 #include "display.h"
 #include "Adafruit_GFX.h"
 #include "Adafruit_SSD1306.h"
+#include "button.h"
 
 #define OUTPUT_IMU
 //#define OUTPUT_SERVO
@@ -30,22 +31,22 @@ int pitch_pidsum, roll_pidsum;
 int pitch_command, roll_command;
 
 //Pitch Axis Params
-float p_pitch = 5; float P_pitch;
-float i_pitch = 0; float I_pitch_old; float I_pitch_new;
+float p_pitch = 3; float P_pitch;
+float i_pitch = 0; float I_pitch_old; float I_pitch_new; //.04 start
 float d_pitch = 0; float D_pitch;
 
 //Roll Axis Params
-float p_roll = 5; float P_roll;
-float i_roll = 0; float I_roll_old; float I_roll_new;
+float p_roll = 6; float P_roll;
+float i_roll = 0; float I_roll_old; float I_roll_new; //.07
 float d_roll = 0; float D_roll;
 
 //#define LOOP_TIME 10000 //20,000 = 50hz 10,000 = 100hz
 
 void setup() {
 
-  act.center[SERVO1] = 1500;
-  act.center[SERVO2] = 1500;
-  act.center[SERVO3] = 1500;
+  act.center[SERVO1] = 1510;
+  act.center[SERVO2] = 1550;
+  act.center[SERVO3] = 1550;
 //setup functions/////////////////////////////////////////////////////////////
   servo_setup();
   ppm_read_setup();
@@ -57,6 +58,8 @@ void setup() {
   #if defined(OUTPUT_IMU)  || defined(OUTPUT_INPUT) || defined(OUTPUT_SERVO) || defined(OUTPUT_OTHER)
     Serial.begin(115200);
   #endif
+
+
 
   delay(500); //delay to prepare for loop to bein
 }
@@ -77,6 +80,7 @@ void loop() {
   controller_loop();
   servo_loop(); //write to servos
   sdwrite_loop(); //write to sd card
+  button_read();
   display_show();
 
 
@@ -93,7 +97,9 @@ void loop() {
   Serial.print(" , ");
   Serial.print(command.input[YAW]);
   Serial.print(" , ");
-  Serial.println(command.mode);
+  Serial.print(command.mode);
+  Serial.print(" , ");
+  Serial.println(button.adc);
 #endif
 
 #ifdef OUTPUT_IMU
@@ -102,11 +108,11 @@ void loop() {
   Serial.print(" , ");
   Serial.print(att.raw[ROLL]);
   Serial.print(" , ");
-  Serial.println(att.raw[PITCH]);
-  // Serial.print(" , ");
-  // Serial.print(timed.cycleTime);
-  // Serial.print(" , ");
-  // Serial.println(timed.totalTime);
+  Serial.print(att.raw[PITCH]);
+  Serial.print(" , ");
+  Serial.print(timed.cycleTime);
+  Serial.print(" , ");
+  Serial.println(timed.totalTime);
 #endif
 
 #ifdef OUTPUT_SERVO
@@ -153,6 +159,7 @@ void loop() {
   while(1) {
     timed.currentTime = micros();
     timed.cycleTime = timed.currentTime - timed.previousTime;
+    timed.hz = 1 * (1000000 / timed.cycleTime);
     #if defined(LOOP_TIME)
       if (timed.cycleTime >= LOOP_TIME) break;
     #else

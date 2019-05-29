@@ -6,3 +6,4 @@ commandt command;
 actt act;
 timet timed;
 pidt pid;
+buttont button;

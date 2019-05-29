@@ -70,10 +70,10 @@ void imu_setup() {
     devStatus = mpu.dmpInitialize();
 
     // supply your own gyro offsets here, scaled for min sensitivity
-    mpu.setXGyroOffset(50);
-    mpu.setYGyroOffset(-230);
-    mpu.setZGyroOffset(-14);
-    mpu.setZAccelOffset(1288); // 1688 factory default for my test chip
+    mpu.setXGyroOffset(43);
+    mpu.setYGyroOffset(3);
+    mpu.setZGyroOffset(-8);
+    mpu.setZAccelOffset(1628); // 1688 factory default for my test chip
 
     // make sure it worked (returns 0 if so)
     if (devStatus == 0) {
@@ -176,8 +176,8 @@ void imu_loop() {
             mpu.dmpGetGravity(&gravity, &q);
             mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
             att.raw[YAW] = ypr[0]*57.30; //yaw
-            att.raw[ROLL] = ypr[2]*-57.30; //pitch
-            att.raw[PITCH] = ypr[1]*57.30; //roll
+            att.raw[PITCH] = ypr[2]*57.30; //pitch
+            att.raw[ROLL] = ypr[1]*-57.30; //roll
             // display real acceleration, adjusted to remove gravity
             // mpu.dmpGetQuaternion(&q, fifoBuffer);
             // mpu.dmpGetAccel(&aa, fifoBuffer);
