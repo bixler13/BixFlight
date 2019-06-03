@@ -14,10 +14,10 @@
 
 //#define OUTPUT_IMU
 //#define OUTPUT_SERVO
-//#define OUTPUT_INPUT
+#define OUTPUT_INPUT
 //#define OUTPUT_OTHER
 
-#define USE_RC
+//#define USE_RC
 int thro_servo_pin = 10;
 int pitch_servo_pin = 9;
 int roll_servo1_pin = 6;
@@ -52,14 +52,12 @@ void setup() {
   ppm_read_setup();
   imu_setup();
   sdwrite_setup();
-  //display_setup();
+  display_setup();
 //end setup functions//////////////////////////////////////////////////////////
 
   #if defined(OUTPUT_IMU)  || defined(OUTPUT_INPUT) || defined(OUTPUT_SERVO) || defined(OUTPUT_OTHER)
     Serial.begin(115200);
   #endif
-
-
 
   delay(500); //delay to prepare for loop to bein
 }
@@ -81,8 +79,7 @@ void loop() {
   servo_loop(); //write to servos
   sdwrite_loop(); //write to sd card
   button_read();
-  //display_show();
-
+  display_show();
 
 //end board loop//////////////////////////////////////////////////////////////
 
@@ -98,6 +95,8 @@ void loop() {
   Serial.print(command.input[YAW]);
   Serial.print(" , ");
   Serial.print(command.mode);
+  Serial.print(" , ");
+  Serial.print(button.num);
   Serial.print(" , ");
   Serial.println(button.adc);
 #endif
@@ -154,7 +153,6 @@ void loop() {
 #endif
 
 //end serial printing/////////////////////////////////////////////////////////
-
 
   while(1) {
     timed.currentTime = micros();

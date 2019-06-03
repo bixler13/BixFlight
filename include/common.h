@@ -62,11 +62,7 @@ struct pidt{
 
 struct buttont{
   int adc = 0;
-  bool one = false;
-  bool two = false;
-  bool three = false;
-  bool four = false;
-  bool five = false;
+  int num = 0;
 }; extern buttont button;
 
 #endif

@@ -7,52 +7,29 @@ void button_read(){
 
     button.adc = analogRead(22);
 
-    if(button.adc > 100 && button.adc < 200){
-      button.one = true;
-      button.two = false;
-      button.three = false;
-      button.four = false;
-      button.five = false;
+    if(button.adc > 150 && button.adc < 220){
+      button.num = 1;
     }
 
-    else if(button.adc > 200 && button.adc < 400){
-      button.one = false;
-      button.two = true;
-      button.three = false;
-      button.four = false;
-      button.five = false;
+    else if(button.adc > 250 && button.adc < 300){
+      button.num = 2;
+
     }
 
-    else if(button.adc > 400 && button.adc < 600){
-      button.one = false;
-      button.two = false;
-      button.three = true;
-      button.four = false;
-      button.five = false;
+    else if(button.adc > 350 && button.adc < 450){
+      button.num = 3;
     }
 
-    else if(button.adc > 600 && button.adc < 800){
-      button.one = false;
-      button.two = false;
-      button.three = false;
-      button.four = true;
-      button.five = false;
+    else if(button.adc > 500 && button.adc < 700){
+      button.num = 4;
     }
 
-    else if(button.adc > 800 && button.adc < 1000){
-      button.one = false;
-      button.two = false;
-      button.three = false;
-      button.four = false;
-      button.five = true;
+    else if(button.adc > 800 && button.adc < 1100){
+      button.num = 5;
     }
 
     else{
-      button.one = false;
-      button.two = false;
-      button.three = false;
-      button.four = false;
-      button.five = false;
+      button.num = 0;
     }
 
 }
