@@ -32,4 +32,14 @@ void button_read(){
       button.num = 0;
     }
 
+    if(button.num == 2 && button.numlast == !2){
+      screen = screen + 1;
+    }
+
+    else if(button.num == 4 && button.numlast == !4){
+      screen = screen - 1;
+    }
+
+    button.numlast = button.num;
+
 }

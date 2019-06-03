@@ -14,8 +14,8 @@
 
 //#define OUTPUT_IMU
 //#define OUTPUT_SERVO
-#define OUTPUT_INPUT
-//#define OUTPUT_OTHER
+//#define OUTPUT_INPUT
+#define OUTPUT_OTHER
 
 //#define USE_RC
 int thro_servo_pin = 10;
@@ -39,6 +39,8 @@ float d_pitch = 0; float D_pitch;
 float p_roll = 6; float P_roll;
 float i_roll = 0; float I_roll_old; float I_roll_new; //.07
 float d_roll = 0; float D_roll;
+
+int screen = 0;
 
 //#define LOOP_TIME 10000 //20,000 = 50hz 10,000 = 100hz
 
@@ -96,9 +98,6 @@ void loop() {
   Serial.print(" , ");
   Serial.print(command.mode);
   Serial.print(" , ");
-  Serial.print(button.num);
-  Serial.print(" , ");
-  Serial.println(button.adc);
 #endif
 
 #ifdef OUTPUT_IMU
@@ -107,11 +106,11 @@ void loop() {
   Serial.print(" , ");
   Serial.print(att.raw[ROLL]);
   Serial.print(" , ");
-  Serial.print(att.raw[PITCH]);
-  Serial.print(" , ");
-  Serial.print(timed.cycleTime);
-  Serial.print(" , ");
-  Serial.println(timed.totalTime);
+  Serial.println(att.raw[PITCH]);
+  // Serial.print(" , ");
+  // Serial.print(timed.cycleTime);
+  // Serial.print(" , ");
+  // Serial.println(timed.totalTime);
 #endif
 
 #ifdef OUTPUT_SERVO
@@ -123,33 +122,13 @@ void loop() {
 #endif
 
 #ifdef OUTPUT_OTHER
-  Serial.print("PITCH");
+  Serial.print(button.num);
   Serial.print(" , ");
-  Serial.print(att.raw[PITCH]);
+  Serial.print(button.numlast);
   Serial.print(" , ");
-  Serial.print(command.angle[PITCH]);
+  Serial.print(screen);
   Serial.print(" , ");
-  Serial.print(att.error[PITCH]);
-  Serial.print(" , ");
-  Serial.print(pitch_pidsum);
-  Serial.print(" , ");
-  Serial.print(act.pwm[SERVO1]);
-  Serial.print(" , ");
-  Serial.print(act.pwms[SERVO1]);
-  Serial.print(" , ");
-  Serial.print("ROLL");
-  Serial.print(" , ");
-  Serial.print(att.raw[ROLL]);
-  Serial.print(" , ");
-  Serial.print(command.angle[ROLL]);
-  Serial.print(" , ");
-  Serial.print(att.error[ROLL]);
-  Serial.print(" , ");
-  Serial.print(act.pwm[SERVO2]);
-  Serial.print(" , ");
-  Serial.print(act.pwms[SERVO2]);
-  Serial.print(" , ");
-  Serial.println(command.mode);
+  Serial.println(button.adc);
 #endif
 
 //end serial printing/////////////////////////////////////////////////////////

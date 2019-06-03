@@ -24,4 +24,6 @@ extern float p_roll; extern float P_roll;
 extern float i_roll; extern float I_roll_old; extern float I_roll_new;
 extern float d_roll; extern float D_roll;
 
+extern int screen;
+
 #endif
