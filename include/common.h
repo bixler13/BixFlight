@@ -64,6 +64,7 @@ struct buttont{
   int adc = 0;
   int num = 0;
   int numlast = 0;
+  int press = 0;
 }; extern buttont button;
 
 #endif

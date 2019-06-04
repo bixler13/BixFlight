@@ -126,6 +126,8 @@ void loop() {
   Serial.print(" , ");
   Serial.print(button.numlast);
   Serial.print(" , ");
+  Serial.print(button.press);
+  Serial.print(" , ");
   Serial.print(screen);
   Serial.print(" , ");
   Serial.println(button.adc);

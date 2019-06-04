@@ -25,30 +25,16 @@ void display_show(){
 
 if (screen  == 0) {
   display.clearDisplay();
-  display.setTextSize(1);
+  display.setTextSize(2);
   display.setTextColor(WHITE);
   display.setCursor(0,0);
-  display.println(F("     BixFlight"));
+  display.println(F(" BixFlight"));
 
-  display.setCursor(0,16);
-  display.print("ROLL ");
-  display.setCursor(50,16);
-  display.print(att.raw[ROLL]);
+  display.setCursor(0,25);
+  display.println(F("    By"));
 
-  display.setCursor(0,24);
-  display.print("PITCH ");
-  display.setCursor(50,24);
-  display.print(att.raw[PITCH]);
-
-  display.setCursor(0,32);
-  display.print("YAW ");
-  display.setCursor(50,32);
-  display.print(att.raw[YAW]);
-
-  display.setCursor(0,40);
-  display.print("hz ");
-  display.setCursor(50,40);
-  display.print(timed.hz);
+  display.setCursor(0,50);
+  display.println(F("    Bix"));
 }
 
 else if (screen == 1){
@@ -96,9 +82,44 @@ else if(screen == 2) {
   display.setTextSize(1);
   display.setTextColor(WHITE);
   display.setCursor(0,0);
-  display.println(F("Screen "));
-  display.setCursor(50,0);
-  display.print(screen);
+  display.println(F(" BixFlight Live Data"));
+
+  display.setCursor(0,8);
+  display.print("-Servo-");
+
+  display.setCursor(75,8);
+  display.print("-IMU-");
+
+  display.setCursor(0,16);
+  display.print("1");
+  display.setCursor(0,24);
+  display.print("2");
+  display.setCursor(0,32);
+  display.print("3");
+  display.setCursor(20,16);
+  display.print(act.pwms[SERVO1]);
+  display.setCursor(20,24);
+  display.print(act.pwms[SERVO2]);
+  display.setCursor(20,32);
+  display.print(act.pwms[SERVO3]);
+
+  display.setCursor(60,16);
+  display.print("Pitch");
+  display.setCursor(60,24);
+  display.print("Roll");
+  display.setCursor(60,32);
+  display.print("Yaw");
+  display.setCursor(95,16);
+  display.print(att.raw[PITCH],1);
+  display.setCursor(95,24);
+  display.print(att.raw[ROLL],1);
+  display.setCursor(95,32);
+  display.print(att.raw[YAW],1);
+
+  display.setCursor(45,50);
+  display.print("Hz");
+  display.setCursor(65,50);
+  display.print(timed.hz);
 }
 
 else if(screen == 3) {
@@ -119,14 +140,6 @@ else if(screen == 4) {
   display.println(F("Screen "));
   display.setCursor(50,0);
   display.print(screen);
-}
-
-if (screen > 4){
-  screen = 0;
-}
-
-if (screen < 0){
-  screen = 4;
 }
 
   display.display();

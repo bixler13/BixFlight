@@ -32,14 +32,44 @@ void button_read(){
       button.num = 0;
     }
 
-    if(button.num == 2 && button.numlast == !2){
-      screen = screen + 1;
+ //button press determination
+    for(int b=1; b<=5; b++){
+      if(button.num == b && button.numlast == !b){
+        button.press = b;
+      }
+      else if(button.num == b && button.numlast == b){
+        button.press = 0;
+      }
     }
+    button.numlast = button.num;
 
-    else if(button.num == 4 && button.numlast == !4){
+//screen switching
+
+    if(button.press == 4){
       screen = screen - 1;
     }
 
-    button.numlast = button.num;
+    if(button.press == 2){
+      screen = screen + 1;
+    }
+
+    if (screen >= 5){
+      screen = 0;
+    }
+
+    if (screen <= -1){
+      screen = 4;
+    }
+
+//value changing
+    else if(button.press == 5){
+      p_pitch = p_pitch + .1;
+    }
+
+    else if(button.press == 3){
+      p_pitch = p_pitch - .1;
+    }
+
+
 
 }
