@@ -7,3 +7,4 @@ actt act;
 timet timed;
 pidt pid;
 buttont button;
+paget page;

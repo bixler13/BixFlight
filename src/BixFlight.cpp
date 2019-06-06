@@ -40,8 +40,6 @@ float p_roll = 6; float P_roll;
 float i_roll = 0; float I_roll_old; float I_roll_new; //.07
 float d_roll = 0; float D_roll;
 
-int screen = 0;
-
 //#define LOOP_TIME 10000 //20,000 = 50hz 10,000 = 100hz
 
 void setup() {
@@ -128,7 +126,7 @@ void loop() {
   Serial.print(" , ");
   Serial.print(button.press);
   Serial.print(" , ");
-  Serial.print(screen);
+  Serial.print(page.num);
   Serial.print(" , ");
   Serial.println(button.adc);
 #endif

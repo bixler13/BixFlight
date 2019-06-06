@@ -23,7 +23,7 @@ void display_setup(){
 
 void display_show(){
 
-if (screen  == 0) {
+if (page.num  == 0) {
   display.clearDisplay();
   display.setTextSize(2);
   display.setTextColor(WHITE);
@@ -37,7 +37,7 @@ if (screen  == 0) {
   display.println(F("    Bix"));
 }
 
-else if (screen == 1){
+else if (page.num == 1){
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(WHITE);
@@ -77,7 +77,7 @@ else if (screen == 1){
   display.print(d_roll);
 }
 
-else if(screen == 2) {
+else if(page.num == 2) {
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(WHITE);
@@ -116,30 +116,35 @@ else if(screen == 2) {
   display.setCursor(95,32);
   display.print(att.raw[YAW],1);
 
-  display.setCursor(45,50);
+  display.setCursor(45,46);
   display.print("Hz");
-  display.setCursor(65,50);
+  display.setCursor(65,46);
   display.print(timed.hz);
+
+  display.setCursor(35,56);
+  display.print("On Time");
+  display.setCursor(80,56);
+  display.print(timed.totalTime/1000000);
 }
 
-else if(screen == 3) {
+else if(page.num == 3) {
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(WHITE);
   display.setCursor(0,0);
   display.println(F("Screen "));
   display.setCursor(50,0);
-  display.print(screen);
+  display.print(page.num);
 }
 
-else if(screen == 4) {
+else if(page.num == 4) {
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(WHITE);
   display.setCursor(0,0);
   display.println(F("Screen "));
   display.setCursor(50,0);
-  display.print(screen);
+  display.print(page.num);
 }
 
   display.display();

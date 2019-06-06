@@ -43,33 +43,32 @@ void button_read(){
     }
     button.numlast = button.num;
 
-//screen switching
+//page switching
 
     if(button.press == 4){
-      screen = screen - 1;
+      page.num = page.num - 1;
     }
 
     if(button.press == 2){
-      screen = screen + 1;
+      page.num = page.num + 1;
     }
 
-    if (screen >= 5){
-      screen = 0;
+    if (page.num >= 5){
+      page.num = 0;
     }
 
-    if (screen <= -1){
-      screen = 4;
+    if (page.num <= -1){
+      page.num = 4;
     }
 
-//value changing
-    else if(button.press == 5){
-      p_pitch = p_pitch + .1;
+// //value changing
+
+    if (page.num == 1){
+          if(button.press == 5){
+            p_pitch = p_pitch + .1;
+          }
+          if(button.press == 3){
+            p_pitch = p_pitch - .1;
+          }
+        }
     }
-
-    else if(button.press == 3){
-      p_pitch = p_pitch - .1;
-    }
-
-
-
-}

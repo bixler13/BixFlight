@@ -67,4 +67,9 @@ struct buttont{
   int press = 0;
 }; extern buttont button;
 
+struct paget{
+  int num = 0;
+  int edit = 0;
+}; extern paget page;
+
 #endif
