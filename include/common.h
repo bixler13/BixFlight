@@ -26,10 +26,10 @@ enum servo {
 };
 
 struct attt{
-  int raw[3];  //raw yaw, pitch , roll
-  int rawp[3]; //last raw yaw, pitch, roll
-  int error[3]; //error in yaw, pitch, roll from comanded value
-  int errorp[3]; //last error in yaw, pitch, roll
+  float raw[3];  //raw yaw, pitch , roll
+  float rawp[3]; //last raw yaw, pitch, roll
+  float error[3]; //error in yaw, pitch, roll from comanded value
+  float errorp[3]; //last error in yaw, pitch, roll
 }; extern attt att;
 
 struct commandt{
@@ -62,11 +62,14 @@ struct pidt{
 
 struct buttont{
   int adc = 0;
-  bool one = false;
-  bool two = false;
-  bool three = false;
-  bool four = false;
-  bool five = false;
+  int num = 0;
+  int numlast = 0;
+  int press = 0;
 }; extern buttont button;
+
+struct paget{
+  int num = 0;
+  int edit = 0;
+}; extern paget page;
 
 #endif

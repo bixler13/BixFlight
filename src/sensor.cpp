@@ -175,9 +175,9 @@ void imu_loop() {
             mpu.dmpGetQuaternion(&q, fifoBuffer);
             mpu.dmpGetGravity(&gravity, &q);
             mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-            att.raw[YAW] = ypr[0]*57.30; //yaw
-            att.raw[PITCH] = ypr[2]*57.30; //pitch
-            att.raw[ROLL] = ypr[1]*-57.30; //roll
+            att.raw[YAW] = ypr[0]*57.3; //yaw
+            att.raw[PITCH] = ypr[2]*57.3; //pitch
+            att.raw[ROLL] = ypr[1]*-57.3; //roll
             // display real acceleration, adjusted to remove gravity
             // mpu.dmpGetQuaternion(&q, fifoBuffer);
             // mpu.dmpGetAccel(&aa, fifoBuffer);
